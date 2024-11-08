@@ -2,12 +2,12 @@ package model;
 
 import java.util.Objects;
 
-public class Production {
+public class Product {
     private String name;
     private int price;
     private String promotion;
 
-    public Production(String name, int price, String promotion) {
+    public Product(String name, int price, String promotion) {
         this.name = name;
         this.price = price;
         this.promotion = promotion;
@@ -19,8 +19,8 @@ public class Production {
         return true;
     }
 
-    public Production getNoneExistNormalProduct(){
-        return new Production(this.name,this.price,null);
+    public Product getNoneExistNormalProduct(){
+        return new Product(this.name,this.price,null);
     }
 
     public String getName(){
@@ -39,9 +39,9 @@ public class Production {
     public boolean equals(Object o) {
         if(this==o)
             return true;
-        if(!(o instanceof Production))
+        if(!(o instanceof Product))
             return false;
-        Production other = (Production)o;
+        Product other = (Product)o;
         return Objects.equals(this.name,other.name)
             && this.price == other.price
             && this.promotion == other.promotion;

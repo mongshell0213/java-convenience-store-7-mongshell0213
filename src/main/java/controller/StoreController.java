@@ -1,6 +1,6 @@
 package controller;
 
-import repository.Productions;
+import repository.Products;
 import service.StoreService;
 
 public class StoreController {
@@ -11,7 +11,7 @@ public class StoreController {
 
     public void run(){
         //안내메시지, 보유 상품 출력
-        Productions productions = storeService.createProductions();
-        storeService.printProductions(productions);
+        Products products = storeService.createProducts();
+        storeService.printProducts(products);
     }
 }

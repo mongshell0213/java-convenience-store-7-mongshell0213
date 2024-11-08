@@ -1,8 +1,8 @@
 package view;
 
 import java.util.List;
-import model.Production;
-import repository.Productions;
+import model.Product;
+import repository.Products;
 
 import static java.lang.System.lineSeparator;
 
@@ -16,32 +16,32 @@ public class OutputView {
     private static final String COUNT_UNIT = "개";
     private static final String BLANK = "";
 
-    public void printProductions(Productions inputProductions) {
-        List<Production> productions = inputProductions.getProductions();
-        StringBuilder sb = buildProductionString(inputProductions, productions);
+    public void printProductions(Products inputProducts) {
+        List<Product> products = inputProducts.getProductions();
+        StringBuilder sb = buildProductionString(inputProducts, products);
         System.out.println(sb);
     }
 
-    private StringBuilder buildProductionString(Productions inputProductions, List<Production> productions) {
+    private StringBuilder buildProductionString(Products inputProducts, List<Product> products) {
         StringBuilder sb = new StringBuilder();
         sb.append(WELCOME_MESSAGE).append(lineSeparator());
-        for (Production production : productions) {
-            process(inputProductions, production, sb);
+        for (Product product : products) {
+            process(inputProducts, product, sb);
         }
         return sb;
     }
 
-    private void process(Productions inputProductions, Production production, StringBuilder sb) {
-        String name = production.getName();
-        String promotion = getPromotion(production);
-        int price = production.getPrice();
-        String quantityString = getQuantityString(inputProductions.getQuantity(production));
+    private void process(Products inputProducts, Product product, StringBuilder sb) {
+        String name = product.getName();
+        String promotion = getPromotion(product);
+        int price = product.getPrice();
+        String quantityString = getQuantityString(inputProducts.getQuantity(product));
         sb.append(String.format(PRODUCTION_FORMAT_MESSAGE, name, price, quantityString, promotion))
             .append(lineSeparator());
     }
 
-    private static String getPromotion(Production production) {
-        String promotion = production.getPromotion();
+    private static String getPromotion(Product product) {
+        String promotion = product.getPromotion();
         if (promotion == null) {
             promotion = BLANK;
         }

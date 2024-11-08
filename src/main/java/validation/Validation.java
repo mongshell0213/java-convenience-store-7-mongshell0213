@@ -1,8 +1,5 @@
 package validation;
 
-import model.Production;
-import repository.Productions;
-
 public class Validation {
     private static final String INPUT_BLANK_ERROR="[ERROR] 비어있는 문자열입니다.";
     private static final String NUMBER_FORMAT_ERROR="[ERROR] 숫자형식이 아닙니다.";

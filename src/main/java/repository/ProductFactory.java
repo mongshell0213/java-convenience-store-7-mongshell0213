@@ -5,18 +5,18 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import model.Production;
+import model.Product;
 import validation.Validation;
 
-public class ProductionFactory {
+public class ProductFactory {
 
     private static final String IO_EXCEPTION_ERROR = "[ERROR] 입출력 작업 예외입니다.";
     private static final String FILE_NOT_FOUND_ERROR = "[ERROR] 파일이 존재 하지 않습니다.";
 
-    public static void input(Productions productions) {
+    public static void input(Products products) {
         try {
             BufferedReader br = new BufferedReader(new FileReader(Constants.PRODUCTS_FILE_PATH));
-            process(productions, br);
+            process(products, br);
         } catch (FileNotFoundException e) {
             throw new IllegalArgumentException(FILE_NOT_FOUND_ERROR);
         } catch (IOException e) {
@@ -25,7 +25,7 @@ public class ProductionFactory {
     }
 
 
-    private static void process(Productions productions, BufferedReader br) throws IOException {
+    private static void process(Products products, BufferedReader br) throws IOException {
         String inputLine;
         int count = 0;
         while ((inputLine = br.readLine()) != null) {
@@ -33,11 +33,11 @@ public class ProductionFactory {
                 continue;
             }
             String[] strings = inputLine.split(Constants.DELIMITER);
-            add(productions, stringsToProduction(strings), Integer.parseInt(strings[Constants.QUANTITY_POSITION]));
+            add(products, stringsToProduction(strings), Integer.parseInt(strings[Constants.QUANTITY_POSITION]));
         }
     }
 
-    private static Production stringsToProduction(String[] strings) {
+    private static Product stringsToProduction(String[] strings) {
         validate(strings);
 
         String name = strings[Constants.NAME_POSITION];
@@ -46,14 +46,14 @@ public class ProductionFactory {
         if (promotion.equals("null")) {
             promotion = null;
         }
-        return new Production(name, price, promotion);
+        return new Product(name, price, promotion);
     }
 
-    private static void add(Productions productions, Production production, int quantity) {
-        productions.add(production, quantity);
-        if (production.isPromotionProduct()) {
-            Production noneExistNormalProduction = production.getNoneExistNormalProduct();
-            add(productions, noneExistNormalProduction, 0);
+    private static void add(Products products, Product product, int quantity) {
+        products.add(product, quantity);
+        if (product.isPromotionProduct()) {
+            Product noneExistNormalProduct = product.getNoneExistNormalProduct();
+            add(products, noneExistNormalProduct, 0);
         }
     }
 
