@@ -47,6 +47,6 @@ public class ProductionsTest {
         Production buyProduction = new Production("콜라", 1000,"MD추천상품");
         productions.buy(buyProduction,5);
 
-        assertThat(productions.getAmount(production)).isEqualTo(5);
+        assertThat(productions.getQuantity(production)).isEqualTo(5);
     }
 }

@@ -23,6 +23,18 @@ public class Production {
         return new Production(this.name,this.price,null);
     }
 
+    public String getName(){
+        return this.name;
+    }
+
+    public String getPromotion(){
+        return this.promotion;
+    }
+
+    public int getPrice(){
+        return this.price;
+    }
+
     @Override
     public boolean equals(Object o) {
         if(this==o)

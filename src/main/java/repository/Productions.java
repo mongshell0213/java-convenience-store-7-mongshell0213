@@ -1,6 +1,8 @@
 package repository;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import model.Production;
 
@@ -35,8 +37,12 @@ public class Productions {
         }
     }
 
-    public int getAmount(Production production){
+    public int getQuantity(Production production){
         return productions.get(production);
+    }
+
+    public List<Production> getProductions(){
+        return new ArrayList<>(productions.keySet());
     }
 
     private void exist(Production production){
