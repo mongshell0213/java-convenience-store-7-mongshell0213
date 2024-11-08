@@ -22,21 +22,20 @@ public class Productions {
         return productions.size();
     }
 
-    /*
-    public void buy(Production buyProduction){
-        int buyAmount = buyProduction.getAmount();
-        Production production = productions.get(getProductionPosition(buyProduction));
-        int productionAmount = production.getAmount();
-
-        //productions.set()
+    public void buy(Production buyProduction,int buyAmount){
+        int productionAmount = productions.get(buyProduction);
+        productions.put(buyProduction,productionAmount-buyAmount);
     }
 
-     */
 
     public void overBuy(Production buyProduction,int buyAmount) {
         int productionAmount = productions.get(buyProduction);
         if (productionAmount < buyAmount) {
             throw new IllegalArgumentException(OVER_BUY_ERROR);
         }
+    }
+
+    public int getAmount(Production production){
+        return productions.get(production);
     }
 }

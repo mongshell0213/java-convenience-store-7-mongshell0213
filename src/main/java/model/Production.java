@@ -13,8 +13,6 @@ public class Production {
         this.promotion = promotion;
     }
 
-
-
     @Override
     public boolean equals(Object o) {
         if(this==o)
