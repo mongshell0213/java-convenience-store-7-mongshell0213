@@ -24,39 +24,37 @@ public class ProductionFactory {
         }
     }
 
+
     private static void process(Productions productions, BufferedReader br) throws IOException {
         String inputLine;
         int count = 0;
-        boolean prePromotionProduct = false;
-        Production production=null;
         while ((inputLine = br.readLine()) != null) {
-            if (count == 0) {
-                count++;
+            if (count++ == 0) {
                 continue;
             }
-            if(prePromotionProduct){
-                productions.add(production.getNoneExistNormalProduct(),0);
-                prePromotionProduct = false;
-            }
-            production = add(productions, inputLine.split(Constants.DELIMITER));
-            if(production.isPromotionProduct()){
-                prePromotionProduct = true;
-            }
+            String[] strings = inputLine.split(Constants.DELIMITER);
+            add(productions, stringsToProduction(strings), Integer.parseInt(strings[Constants.QUANTITY_POSITION]));
         }
     }
 
+    private static Production stringsToProduction(String[] strings) {
+        validate(strings);
 
-    private static Production add(Productions productions, String[] inputLine) {
-        validate(inputLine);
-
-        String name = inputLine[Constants.NAME_POSITION];
-        int price = Integer.parseInt(inputLine[Constants.PRICE_POSITION]);
-        int quantity = Integer.parseInt(inputLine[Constants.QUANTITY_POSITION]);
-        String promotion = inputLine[Constants.PROMOTION_POSITION];
-        if(promotion.equals("null"))
+        String name = strings[Constants.NAME_POSITION];
+        int price = Integer.parseInt(strings[Constants.PRICE_POSITION]);
+        String promotion = strings[Constants.PROMOTION_POSITION];
+        if (promotion.equals("null")) {
             promotion = null;
-        productions.add(new Production(name, price, promotion),quantity);
+        }
         return new Production(name, price, promotion);
+    }
+
+    private static void add(Productions productions, Production production, int quantity) {
+        productions.add(production, quantity);
+        if (production.isPromotionProduct()) {
+            Production noneExistNormalProduction = production.getNoneExistNormalProduct();
+            add(productions, noneExistNormalProduction, 0);
+        }
     }
 
     private static void validate(String[] input) {
