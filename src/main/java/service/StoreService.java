@@ -1,6 +1,8 @@
 package service;
 
+import factory.OrderFactory;
 import factory.ProductFactory;
+import model.Orders;
 import model.Products;
 import view.InputView;
 import view.OutputView;
@@ -18,8 +20,9 @@ public class StoreService {
         outputView.printProductions(products);
     }
 
-    public void readOrders(){
+    public void readOrders(Orders orders){
         InputView inputView = new InputView();
-        inputView.readItem();
+        String orderString = inputView.readItem();
+        OrderFactory.add(orders,orderString);
     }
 }

@@ -12,4 +12,5 @@ public class Constants {
     public static final String ORDER_DELIMITER = "-";
     public static final String ORDER_ENDER = "]";
     public static final int ORDER_ATTRIBUTE_LEN = 2;
+    public static final String BLANK = "";
 }

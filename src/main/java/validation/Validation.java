@@ -1,7 +1,6 @@
 package validation;
 
 import constants.Constants;
-import view.InputView;
 
 public class Validation {
 
@@ -30,5 +29,6 @@ public class Validation {
         if (string.split(Constants.ORDER_DELIMITER).length != Constants.ORDER_ATTRIBUTE_LEN) {
             throw new IllegalArgumentException(INPUT_ERROR);
         }
+        number(string.split(Constants.ORDER_DELIMITER)[1].replace(Constants.ORDER_ENDER,Constants.BLANK));
     }
 }

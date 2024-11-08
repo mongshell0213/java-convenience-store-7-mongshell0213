@@ -1,5 +1,6 @@
 package view;
 
+import constants.Constants;
 import java.util.List;
 import model.Product;
 import model.Products;
@@ -14,7 +15,6 @@ public class OutputView {
     private static final String PRODUCTION_FORMAT_MESSAGE = "- %S %,d원 %s %s";
     private static final String NONE_PRODUCTION_MESSAGE = "재고 없음";
     private static final String COUNT_UNIT = "개";
-    private static final String BLANK = "";
 
     public void printProductions(Products inputProducts) {
         List<Product> products = inputProducts.getProductions();
@@ -43,7 +43,7 @@ public class OutputView {
     private static String getPromotion(Product product) {
         String promotion = product.getPromotion();
         if (promotion == null) {
-            promotion = BLANK;
+            promotion = Constants.BLANK;
         }
         return promotion;
     }
