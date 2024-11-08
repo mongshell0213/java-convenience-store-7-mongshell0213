@@ -27,24 +27,36 @@ public class ProductionFactory {
     private static void process(Productions productions, BufferedReader br) throws IOException {
         String inputLine;
         int count = 0;
+        boolean prePromotionProduct = false;
+        Production production=null;
         while ((inputLine = br.readLine()) != null) {
             if (count == 0) {
                 count++;
                 continue;
             }
-            add(productions, inputLine.split(Constants.DELIMITER));
+            if(prePromotionProduct){
+                productions.add(production.getNoneExistNormalProduct(),0);
+                prePromotionProduct = false;
+            }
+            production = add(productions, inputLine.split(Constants.DELIMITER));
+            if(production.isPromotionProduct()){
+                prePromotionProduct = true;
+            }
         }
     }
 
-    private static void add(Productions productions, String[] inputLine) {
+
+    private static Production add(Productions productions, String[] inputLine) {
         validate(inputLine);
 
         String name = inputLine[Constants.NAME_POSITION];
         int price = Integer.parseInt(inputLine[Constants.PRICE_POSITION]);
         int quantity = Integer.parseInt(inputLine[Constants.QUANTITY_POSITION]);
         String promotion = inputLine[Constants.PROMOTION_POSITION];
-        Production production = new Production(name, price, promotion);
-        productions.add(production,quantity);
+        if(promotion.equals("null"))
+            promotion = null;
+        productions.add(new Production(name, price, promotion),quantity);
+        return new Production(name, price, promotion);
     }
 
     private static void validate(String[] input) {

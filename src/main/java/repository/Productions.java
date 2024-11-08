@@ -1,8 +1,6 @@
 package repository;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import model.Production;
 
@@ -12,7 +10,7 @@ public class Productions {
     public static final String OVER_BUY_ERROR = "[ERROR] 재고 수량을 초과하여 구매할 수 없습니다. 다시 입력해 주세요.";
     public static final String EXIST_ERROR="[ERROR] 존재하지 않는 상품입니다. 다시 입력해 주세요.";
     public Productions() {
-        productions = new HashMap<>();
+        productions = new LinkedHashMap<>();
     }
 
     public void add(Production production,int amount) {

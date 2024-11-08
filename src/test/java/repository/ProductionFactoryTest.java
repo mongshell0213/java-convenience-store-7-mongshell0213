@@ -1,5 +1,7 @@
 package repository;
 
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+
 import java.io.IOException;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -11,6 +13,6 @@ public class ProductionFactoryTest {
 
         ProductionFactory.input(productions);
 
-        Assertions.assertThat(productions.size()).isEqualTo(16);
+        assertThat(productions.size()).isEqualTo(18);
     }
 }

@@ -13,6 +13,16 @@ public class Production {
         this.promotion = promotion;
     }
 
+    public boolean isPromotionProduct(){
+        if(promotion == null)
+            return false;
+        return true;
+    }
+
+    public Production getNoneExistNormalProduct(){
+        return new Production(this.name,this.price,null);
+    }
+
     @Override
     public boolean equals(Object o) {
         if(this==o)
