@@ -12,4 +12,16 @@ public class Production {
         this.amount = amount;
         this.promotion = promotion;
     }
+
+    public int getAmount() {
+        return amount;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        Production other = (Production)o;
+        return this.name == other.name
+            && this.price == other.price
+            && this.promotion == other.promotion;
+    }
 }
