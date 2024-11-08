@@ -12,7 +12,7 @@ public class ProductionTest {
         strings = {"탄산2+1"}
     )
     void 아이템_생성_테스트(String promotion) {
-        Production production = new Production("콜라", 1000, 10, promotion);
+        Production production = new Production("콜라", 1000, promotion);
         Assertions.assertThat(production).isInstanceOf(Production.class);
     }
 }

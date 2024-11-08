@@ -43,8 +43,8 @@ public class ProductionFactory {
         int price = Integer.parseInt(inputLine[Constants.PRICE_POSITION]);
         int quantity = Integer.parseInt(inputLine[Constants.QUANTITY_POSITION]);
         String promotion = inputLine[Constants.PROMOTION_POSITION];
-        Production production = new Production(name, price, quantity, promotion);
-        productions.add(production);
+        Production production = new Production(name, price, promotion);
+        productions.add(production,quantity);
     }
 
     private static void validate(String[] input) {
