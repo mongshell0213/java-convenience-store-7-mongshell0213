@@ -1,8 +1,9 @@
-package repository;
+package factory;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 import java.io.IOException;
+import model.Products;
 import org.junit.jupiter.api.Test;
 
 public class ProductFactoryTest {

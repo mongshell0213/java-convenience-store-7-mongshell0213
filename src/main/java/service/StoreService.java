@@ -1,7 +1,8 @@
 package service;
 
-import repository.ProductFactory;
-import repository.Products;
+import factory.ProductFactory;
+import model.Products;
+import view.InputView;
 import view.OutputView;
 
 public class StoreService {
@@ -15,5 +16,10 @@ public class StoreService {
     public void printProducts(Products products){
         OutputView outputView = new OutputView();
         outputView.printProductions(products);
+    }
+
+    public void readOrders(){
+        InputView inputView = new InputView();
+        inputView.readItem();
     }
 }

@@ -2,7 +2,7 @@ package view;
 
 import java.util.List;
 import model.Product;
-import repository.Products;
+import model.Products;
 
 import static java.lang.System.lineSeparator;
 

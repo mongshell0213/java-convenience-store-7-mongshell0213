@@ -1,4 +1,4 @@
-package repository;
+package factory;
 
 import constants.Constants;
 import java.io.BufferedReader;
@@ -6,6 +6,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import model.Product;
+import model.Products;
 import validation.Validation;
 
 public class ProductFactory {

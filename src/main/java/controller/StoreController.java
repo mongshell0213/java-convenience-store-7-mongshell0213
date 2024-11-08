@@ -1,6 +1,6 @@
 package controller;
 
-import repository.Products;
+import model.Products;
 import service.StoreService;
 
 public class StoreController {
