@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 
 public class ProductionsTest {
     @Test
-    void 상품추가확인1() {
+    void 상품추가확인() {
         Production production = new Production("콜라", 1000,"MD추천상품");
         Productions productions = new Productions();
 
@@ -25,9 +25,19 @@ public class ProductionsTest {
 
         Production buyProduction = new Production("콜라", 1000,"MD추천상품");
 
-        assertThatThrownBy(()->productions.overBuy(buyProduction,15)).isInstanceOf(IllegalArgumentException.class);
+        assertThatThrownBy(()->productions.buy(buyProduction,15)).isInstanceOf(IllegalArgumentException.class);
     }
 
+    @Test
+    void 상품_미존재_테스트(){
+        Production production = new Production("콜라", 1000,"MD추천상품");
+        Productions productions = new Productions();
+        productions.add(production,10);
+
+        Production buyProduction = new Production("사이다", 1000,"MD추천상품");
+
+        assertThatThrownBy(()->productions.buy(buyProduction,10)).isInstanceOf(IllegalArgumentException.class);
+    }
     @Test
     void 상품_구매_테스트(){
         Production production = new Production("콜라", 1000,"MD추천상품");
