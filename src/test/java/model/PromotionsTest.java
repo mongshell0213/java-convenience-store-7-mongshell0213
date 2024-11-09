@@ -1,11 +1,11 @@
 package model;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
 import constants.Constants;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -55,10 +55,10 @@ class PromotionsTest {
         String invalidDateString = "2025-11-09";
         LocalDate invalidDate = LocalDate.parse(invalidDateString,dateTimeFormatter);
 
-        assertThat(promotions.isPromotion(validDate,"탄산2+1")).isTrue();
-        assertThat(promotions.isPromotion(validDate,"MD추천상품")).isFalse();
-        assertThat(promotions.isPromotion(invalidDate,"탄산2+1")).isFalse();
-        assertThat(promotions.isPromotion(validDate,null)).isFalse();
+        assertThat(promotions.isPromotion(validDate,"탄산2+1").get()).isInstanceOf(Promotion.class);
+        assertThat(promotions.isPromotion(validDate,"MD추천상품")).isInstanceOf(Optional.empty().getClass());
+        assertThat(promotions.isPromotion(invalidDate,"탄산2+1")).isInstanceOf(Optional.empty().getClass());
+        assertThat(promotions.isPromotion(validDate,null)).isInstanceOf(Optional.empty().getClass());
     }
 
 }

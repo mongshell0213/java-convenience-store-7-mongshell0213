@@ -51,6 +51,10 @@ public class Promotion {
             && this.end_date.equals(other.end_date);
     }
 
+    public int getMoreBuy(int quantity){
+        return this.buy-(quantity%(this.buy+this.get));
+    }
+
     @Override
     public int hashCode() {
         return Objects.hash(name,buy,get,start_date,end_date);

@@ -4,10 +4,12 @@ import factory.OrderFactory;
 import factory.ProductFactory;
 import factory.PromotionFactory;
 import java.time.LocalDate;
+import java.util.Optional;
 import model.Order;
 import model.Orders;
 import model.Product;
 import model.Products;
+import model.Promotion;
 import model.Promotions;
 import view.InputView;
 import view.OutputView;
@@ -20,15 +22,15 @@ public class StoreService {
         return products;
     }
 
-    public void printProducts(Products products){
+    public void printProducts(Products products) {
         OutputView outputView = new OutputView();
         outputView.printProductions(products);
     }
 
-    public void readOrders(Orders orders){
+    public void readOrders(Orders orders) {
         InputView inputView = new InputView();
         String orderString = inputView.readItem();
-        OrderFactory.add(orders,orderString);
+        OrderFactory.add(orders, orderString);
     }
 
     public Promotions createPromotions() {
@@ -37,22 +39,27 @@ public class StoreService {
         return promotions;
     }
 
-    public void buyProducts(Products products,Order order,Promotions promotions){
+    public void buyProducts(Products products, Order order, Promotions promotions) {
         products.isExist(order);
         //프로모션 여부에 따라 null or 프로모션 이름
         String promotionName = products.getPromotionName(order);
-        boolean buyPromotion = promotions.isPromotion(LocalDate.now(),promotionName);
-        process(products,order,buyPromotion);
+        Optional<Promotion> buyPromotion = promotions.isPromotion(LocalDate.now(), promotionName);
+        process(products, order, buyPromotion);
     }
 
 
-    private Products process(Products products,Order order,boolean buyPromotion){
-        if(!buyPromotion){
+    private int process(Products products, Order order, Optional<Promotion> buyPromotion) {
+        if (!buyPromotion.isPresent()) {
             String orderName = order.getName();
             int buyQuantity = order.getQuantity();
-            products.buy(orderName,buyQuantity,null);
+            products.buy(orderName, buyQuantity, null);
+            return buyQuantity * order.getQuantity();
         }
-        return products;
+
+        Promotion promotion = buyPromotion.get();
+        promotion.getMoreBuy(order.getQuantity());
+        return 0;
     }
+
 
 }

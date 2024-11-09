@@ -2,9 +2,9 @@ package validation;
 
 import constants.Constants;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import model.Promotion;
 
 public class Validation {
 
@@ -45,4 +45,6 @@ public class Validation {
             throw new IllegalArgumentException(DATE_FORMAT_ERROR);
         }
     }
+
+
 }
