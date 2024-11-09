@@ -28,11 +28,8 @@ public class ProductFactory {
 
     private static void process(Products products, BufferedReader br) throws IOException {
         String inputLine;
-        int count = 0;
+        br.readLine();
         while ((inputLine = br.readLine()) != null) {
-            if (count++ == 0) {
-                continue;
-            }
             String[] strings = inputLine.split(Constants.DELIMITER);
             add(products, stringsToProduction(strings), Integer.parseInt(strings[Constants.QUANTITY_POSITION]));
         }

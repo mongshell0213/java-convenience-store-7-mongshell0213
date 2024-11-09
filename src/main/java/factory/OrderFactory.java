@@ -24,7 +24,7 @@ public class OrderFactory {
         Validation.blank(string);
         String[] splitOrder = string.split(Constants.DELIMITER);
         for (String order : splitOrder) {
-            Validation.pattern(order);
+            Validation.orderPattern(order);
         }
     }
 
