@@ -60,6 +60,23 @@ public class ValidationTest extends NsTest {
             .isInstanceOf(IllegalArgumentException.class);
     }
 
+
+    @ParameterizedTest
+    @ValueSource(strings = {"Y", "N"})
+    void 대답_패턴_테스트(String answer) {
+        assertSimpleTest(() -> {
+            Validation.answerPattern(answer);
+            assertThat(output()).isBlank();
+        });
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"y", "n", "a"})
+    void 대답_패턴_실패_테스트(String answer) {
+        assertThatThrownBy(() -> Validation.answerPattern(answer))
+            .isInstanceOf(IllegalArgumentException.class);
+    }
+
     @Override
     protected void runMain() {
 

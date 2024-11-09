@@ -1,5 +1,8 @@
 package validation;
 
+import static constants.Constants.NO_ANSWER;
+import static constants.Constants.YES_ANSWER;
+
 import constants.Constants;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -46,5 +49,9 @@ public class Validation {
         }
     }
 
-
+    public static void answerPattern(String answer){
+        if(!answer.equals(YES_ANSWER) && !answer.equals(NO_ANSWER)){
+            throw new IllegalArgumentException(INPUT_ERROR);
+        }
+    }
 }

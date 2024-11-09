@@ -30,7 +30,9 @@ public class Promotion {
     public boolean isSame(String promotionName){
         return this.name.equals(promotionName);
     }
-
+    public String getName(){
+        return this.name;
+    }
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {
@@ -51,9 +53,11 @@ public class Promotion {
             && this.end_date.equals(other.end_date);
     }
 
-    public int getMoreBuy(int quantity){
-        return this.buy-(quantity%(this.buy+this.get));
+    public boolean getMoreFree(int quantity){
+        return buy-(quantity%(buy+get)) == 0;
     }
+
+
 
     @Override
     public int hashCode() {

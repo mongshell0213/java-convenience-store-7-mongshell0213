@@ -20,4 +20,7 @@ public class Constants {
     public static final int PROMOTION_START_DATE_POSITION = 3;
     public static final int PROMOTION_END_DATE_POSITION = 4;
     public static final String DATE_FORMAT = "yyyy-MM-dd";
+
+    public static final String YES_ANSWER = "Y";
+    public static final String NO_ANSWER="N";
 }

@@ -18,8 +18,8 @@ public class ProtmotionTest {
         LocalDate end = LocalDate.parse(endString, dateTimeFormatter);
         Promotion promotion = new Promotion("탄산2+1", 2, 1, start, end);
 
-        int moreBuyCount = promotion.getMoreBuy(4);
+        boolean getFree = promotion.getMoreFree(5);
 
-        assertThat(moreBuyCount).isEqualTo(1);
+        assertThat(getFree).isTrue();
     }
 }

@@ -49,15 +49,20 @@ public class StoreService {
 
 
     private int process(Products products, Order order, Optional<Promotion> buyPromotion) {
+        String orderName = order.getName();
+        int buyQuantity = order.getQuantity();
         if (!buyPromotion.isPresent()) {
-            String orderName = order.getName();
-            int buyQuantity = order.getQuantity();
             products.buy(orderName, buyQuantity, null);
             return buyQuantity * order.getQuantity();
         }
 
         Promotion promotion = buyPromotion.get();
-        promotion.getMoreBuy(order.getQuantity());
+        boolean moreFree = promotion.getMoreFree(order.getQuantity());
+        if(moreFree){
+            InputView inputView = new InputView();
+            String answer = inputView.moreFreeProduct(orderName);
+            //answer 검증
+        }
         return 0;
     }
 
