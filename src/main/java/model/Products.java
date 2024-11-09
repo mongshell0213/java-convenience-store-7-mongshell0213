@@ -56,6 +56,6 @@ public class Products {
                 return true;
             }
         }
-        return false;
+        throw new IllegalArgumentException(EXIST_ERROR);
     }
 }

@@ -18,4 +18,8 @@ public class Orders {
     public int getSize(){
         return inputOrders.size();
     }
+
+    public List<Order> getOrders(){
+        return inputOrders;
+    }
 }

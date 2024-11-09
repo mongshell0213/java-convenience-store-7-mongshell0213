@@ -26,6 +26,17 @@ public class ProductsTest {
 
         assertThat(products.isExist(order)).isTrue();
     }
+
+    @Test
+    void 상품_미존재_테스트(){
+        Product product = new Product("콜라", 1000,"MD추천상품");
+        Products products = new Products();
+        products.add(product,10);
+
+        Order order = new Order("사이다",5);
+
+        assertThatThrownBy(()->products.isExist(order)).isInstanceOf(IllegalArgumentException.class);
+    }
 /*
     @Test
     void 상품_과잉구매_테스트(){

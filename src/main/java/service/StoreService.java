@@ -3,6 +3,7 @@ package service;
 import factory.OrderFactory;
 import factory.ProductFactory;
 import factory.PromotionFactory;
+import model.Order;
 import model.Orders;
 import model.Products;
 import model.Promotions;
@@ -32,5 +33,12 @@ public class StoreService {
         Promotions promotions = new Promotions();
         PromotionFactory.input(promotions);
         return promotions;
+    }
+
+    public void buyProducts(Products products,Orders orders,Promotions promotions){
+        for(Order order:orders.getOrders()) {
+            products.isExist(order);
+
+        }
     }
 }

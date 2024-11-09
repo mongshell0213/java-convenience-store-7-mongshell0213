@@ -8,8 +8,8 @@ public class Promotion {
     private String name;
     private int buy;
     private int get;
-    LocalDate start_date;
-    LocalDate end_date;
+    private LocalDate start_date;
+    private LocalDate end_date;
 
     public Promotion(String name, int buy, int get, LocalDate start_date, LocalDate end_date) {
         this.name = name;
@@ -17,6 +17,14 @@ public class Promotion {
         this.get = get;
         this.start_date = start_date;
         this.end_date = end_date;
+    }
+
+    public boolean isStartEqualOrAfter(LocalDate date){
+        return (date.isEqual(start_date) || date.isAfter(start_date));
+    }
+
+    public boolean isEndBeforeOrEqual(LocalDate date){
+        return (date.isBefore(end_date) || date.isEqual(end_date));
     }
 
     @Override

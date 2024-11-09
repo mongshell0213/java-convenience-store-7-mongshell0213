@@ -1,5 +1,7 @@
 package model;
 
+import camp.nextstep.edu.missionutils.DateTimes;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,5 +18,14 @@ public class Promotions {
     }
     public boolean isContain(Promotion promotion){
         return inputPromotions.stream().filter(p->p.equals(promotion)).findAny().isPresent();
+    }
+
+    public boolean isPromotionDate(LocalDate date){
+        for(Promotion promotion : inputPromotions){
+            if(promotion.isStartEqualOrAfter(date)
+                && promotion.isEndBeforeOrEqual(date))
+                return true;
+        }
+        return false;
     }
 }
