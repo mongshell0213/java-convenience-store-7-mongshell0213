@@ -38,7 +38,8 @@ public class StoreService {
     public void buyProducts(Products products,Orders orders,Promotions promotions){
         for(Order order:orders.getOrders()) {
             products.isExist(order);
-
+            products.getPromotionName(order);
+            //promotions.isPromotionDate(order.get)
         }
     }
 }
