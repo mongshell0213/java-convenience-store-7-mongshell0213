@@ -2,8 +2,10 @@ package service;
 
 import factory.OrderFactory;
 import factory.ProductFactory;
+import factory.PromotionFactory;
 import model.Orders;
 import model.Products;
+import model.Promotions;
 import view.InputView;
 import view.OutputView;
 
@@ -24,5 +26,11 @@ public class StoreService {
         InputView inputView = new InputView();
         String orderString = inputView.readItem();
         OrderFactory.add(orders,orderString);
+    }
+
+    public Promotions createPromotions() {
+        Promotions promotions = new Promotions();
+        PromotionFactory.input(promotions);
+        return promotions;
     }
 }

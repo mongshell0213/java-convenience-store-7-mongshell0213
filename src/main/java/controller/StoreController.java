@@ -2,6 +2,7 @@ package controller;
 
 import model.Orders;
 import model.Products;
+import model.Promotions;
 import service.StoreService;
 
 public class StoreController {
@@ -16,5 +17,6 @@ public class StoreController {
         storeService.printProducts(products);
         Orders orders = new Orders();
         storeService.readOrders(orders);
+        Promotions promotions = storeService.createPromotions();
     }
 }
