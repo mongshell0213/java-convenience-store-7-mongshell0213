@@ -25,14 +25,17 @@ public class Products {
     }
 
 
-    public void buy(String orderName, int quantity, String promotionName) {
+    public int buy(String orderName, int quantity, String promotionName) {
         List<Product> products = getProductions();
+        int price=0;
         for (Product product : products) {
             if (product.isSameName(orderName)
                 && Objects.equals(product.getPromotion(), promotionName)) {
                 reduce(product, quantity);
+                price = product.getPrice() * quantity;
             }
         }
+        return price;
     }
 
     private void reduce(Product product, int reduceQuantity) {

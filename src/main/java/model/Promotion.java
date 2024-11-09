@@ -19,20 +19,22 @@ public class Promotion {
         this.end_date = end_date;
     }
 
-    public boolean isStartEqualOrAfter(LocalDate date){
+    public boolean isStartEqualOrAfter(LocalDate date) {
         return (date.isEqual(start_date) || date.isAfter(start_date));
     }
 
-    public boolean isEndBeforeOrEqual(LocalDate date){
+    public boolean isEndBeforeOrEqual(LocalDate date) {
         return (date.isBefore(end_date) || date.isEqual(end_date));
     }
 
-    public boolean isSame(String promotionName){
+    public boolean isSame(String promotionName) {
         return this.name.equals(promotionName);
     }
-    public String getName(){
+
+    public String getName() {
         return this.name;
     }
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {
@@ -53,14 +55,22 @@ public class Promotion {
             && this.end_date.equals(other.end_date);
     }
 
-    public boolean getMoreFree(int quantity){
-        return buy-(quantity%(buy+get)) == 0;
+    public boolean getMoreFree(int quantity) {
+        return buy - (quantity % (buy + get)) == 0;
     }
 
+    public int getBuyCount(int quantity) {
+        int quotient = quantity / (buy + get);
+        return quotient * buy + (quantity - quotient * (buy + get));
+    }
+
+    public int getFreeCount(int quantity) {
+        return quantity - getBuyCount(quantity);
+    }
 
 
     @Override
     public int hashCode() {
-        return Objects.hash(name,buy,get,start_date,end_date);
+        return Objects.hash(name, buy, get, start_date, end_date);
     }
 }
