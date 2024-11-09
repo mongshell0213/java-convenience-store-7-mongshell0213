@@ -15,7 +15,7 @@ public class ProductsTest {
 
         assertThat(products.size()).isEqualTo(1);
     }
-
+/*
     @Test
     void 상품_과잉구매_테스트(){
         Product product = new Product("콜라", 1000,"MD추천상품");
@@ -48,4 +48,6 @@ public class ProductsTest {
 
         assertThat(products.getQuantity(product)).isEqualTo(5);
     }
+
+ */
 }

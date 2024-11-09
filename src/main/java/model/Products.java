@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import model.Product;
 
 public class Products {
 
@@ -23,6 +22,7 @@ public class Products {
         return productions.size();
     }
 
+    /*
     public void buy(Product buyProduct,int buyAmount){
         exist(buyProduct);
         int productionAmount = productions.get(buyProduct);
@@ -30,12 +30,15 @@ public class Products {
         productions.put(buyProduct,productionAmount-buyAmount);
     }
 
+
     private void overBuy(Product buyProduct,int buyAmount) {
         int productionAmount = productions.get(buyProduct);
         if (productionAmount < buyAmount) {
             throw new IllegalArgumentException(OVER_BUY_ERROR);
         }
     }
+
+     */
 
     public int getQuantity(Product product){
         return productions.get(product);
