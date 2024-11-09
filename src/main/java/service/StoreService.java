@@ -3,8 +3,10 @@ package service;
 import factory.OrderFactory;
 import factory.ProductFactory;
 import factory.PromotionFactory;
+import java.time.LocalDate;
 import model.Order;
 import model.Orders;
+import model.Product;
 import model.Products;
 import model.Promotions;
 import view.InputView;
@@ -35,11 +37,20 @@ public class StoreService {
         return promotions;
     }
 
-    public void buyProducts(Products products,Orders orders,Promotions promotions){
-        for(Order order:orders.getOrders()) {
-            products.isExist(order);
-            products.getPromotionName(order);
-            //promotions.isPromotionDate(order.get)
+    public void buyProducts(Products products,Order order,Promotions promotions){
+        products.isExist(order);
+        //프로모션 여부에 따라 null or 프로모션 이름
+        String promotionName = products.getPromotionName(order);
+        boolean buyPromotion = promotions.isPromotion(LocalDate.now(),promotionName);
+        //process(products,order,buyPromotion);
+    }
+
+    /*
+    private Products process(Products products,Order order,boolean buyPromotion){
+        if(!buyPromotion){
+            products.buy(order,null);
         }
     }
+
+     */
 }

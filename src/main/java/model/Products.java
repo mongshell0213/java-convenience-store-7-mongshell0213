@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 public class Products {
 
@@ -23,23 +24,31 @@ public class Products {
         return productions.size();
     }
 
-    /*
-    public void buy(Product buyProduct,int buyAmount){
-        exist(buyProduct);
-        int productionAmount = productions.get(buyProduct);
-        overBuy(buyProduct,buyAmount);
-        productions.put(buyProduct,productionAmount-buyAmount);
+
+    public void buy(Order order, String promotionName) {
+        String orderName = order.getName();
+        List<Product> products = getProductions();
+        for (Product product : products) {
+            if (product.isSameName(orderName)
+                && Objects.equals(product.getPromotion(), promotionName)) {
+                reduce(product, order.getQuantity());
+            }
+        }
     }
 
+    private void reduce(Product product, int reduceQuantity) {
+        overBuy(product, reduceQuantity);
+        int productionAmount = productions.get(product);
+        productions.put(product, productionAmount - reduceQuantity);
+    }
 
-    private void overBuy(Product buyProduct,int buyAmount) {
+    private void overBuy(Product buyProduct, int buyAmount) {
         int productionAmount = productions.get(buyProduct);
         if (productionAmount < buyAmount) {
             throw new IllegalArgumentException(OVER_BUY_ERROR);
         }
     }
 
-     */
 
     public int getQuantity(Product product) {
         return productions.get(product);

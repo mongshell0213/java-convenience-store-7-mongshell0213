@@ -27,6 +27,10 @@ public class Promotion {
         return (date.isBefore(end_date) || date.isEqual(end_date));
     }
 
+    public boolean isSame(String promotionName){
+        return this.name.equals(promotionName);
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {

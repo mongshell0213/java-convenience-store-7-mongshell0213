@@ -62,30 +62,30 @@ public class ProductsTest {
 
         assertThat(products.getPromotionName(order)).isNull();
     }
-/*
+
     @Test
-    void 상품_과잉구매_테스트(){
-        Product product = new Product("콜라", 1000,"MD추천상품");
+    void 상품_과잉구매_테스트() {
+        Product product = new Product("콜라", 1000, "MD추천상품");
         Products products = new Products();
-        products.add(product,10);
+        products.add(product, 10);
 
-        Product buyProduct = new Product("콜라", 1000,"MD추천상품");
+        Order order = new Order("콜라", 15);
 
-        assertThatThrownBy(()-> products.buy(buyProduct,15)).isInstanceOf(IllegalArgumentException.class);
+        assertThatThrownBy(() -> products.buy(order, "MD추천상품")).isInstanceOf(IllegalArgumentException.class);
     }
 
 
     @Test
-    void 상품_구매_테스트(){
-        Product product = new Product("콜라", 1000,"MD추천상품");
+    void 상품_구매_테스트() {
+        Product product = new Product("콜라", 1000, null);
         Products products = new Products();
-        products.add(product,10);
+        products.add(product, 10);
 
-        Product buyProduct = new Product("콜라", 1000,"MD추천상품");
-        products.buy(buyProduct,5);
+        Order order = new Order("콜라", 10);
+        products.buy(order, null);
 
-        assertThat(products.getQuantity(product)).isEqualTo(5);
+        assertThat(products.getQuantity(product)).isEqualTo(0);
     }
 
- */
+
 }

@@ -55,8 +55,10 @@ class PromotionsTest {
         String invalidDateString = "2025-11-09";
         LocalDate invalidDate = LocalDate.parse(invalidDateString,dateTimeFormatter);
 
-        assertThat(promotions.isPromotionDate(validDate)).isTrue();
-        assertThat(promotions.isPromotionDate(invalidDate)).isFalse();
+        assertThat(promotions.isPromotion(validDate,"탄산2+1")).isTrue();
+        assertThat(promotions.isPromotion(validDate,"MD추천상품")).isFalse();
+        assertThat(promotions.isPromotion(invalidDate,"탄산2+1")).isFalse();
+        assertThat(promotions.isPromotion(validDate,null)).isFalse();
     }
 
 }

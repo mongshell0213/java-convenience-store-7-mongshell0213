@@ -20,10 +20,11 @@ public class Promotions {
         return inputPromotions.stream().filter(p->p.equals(promotion)).findAny().isPresent();
     }
 
-    public boolean isPromotionDate(LocalDate date){
+    public boolean isPromotion(LocalDate date,String orderPromotionName){
         for(Promotion promotion : inputPromotions){
             if(promotion.isStartEqualOrAfter(date)
-                && promotion.isEndBeforeOrEqual(date))
+                && promotion.isEndBeforeOrEqual(date)
+                && promotion.isSame(orderPromotionName))
                 return true;
         }
         return false;
