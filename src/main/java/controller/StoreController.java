@@ -1,5 +1,6 @@
 package controller;
 
+import model.Order;
 import model.Orders;
 import model.Products;
 import model.Promotions;
@@ -18,5 +19,8 @@ public class StoreController {
         Orders orders = new Orders();
         storeService.readOrders(orders);
         Promotions promotions = storeService.createPromotions();
+        for(Order order: orders.getOrders()) {
+            storeService.buyProducts(products, order, promotions);
+        }
     }
 }

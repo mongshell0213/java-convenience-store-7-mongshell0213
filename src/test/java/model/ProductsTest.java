@@ -69,9 +69,10 @@ public class ProductsTest {
         Products products = new Products();
         products.add(product, 10);
 
-        Order order = new Order("콜라", 15);
+        String orderName = "콜라";
+        int quantity = 15;
 
-        assertThatThrownBy(() -> products.buy(order, "MD추천상품")).isInstanceOf(IllegalArgumentException.class);
+        assertThatThrownBy(() -> products.buy(orderName,quantity, "MD추천상품")).isInstanceOf(IllegalArgumentException.class);
     }
 
 
@@ -81,8 +82,9 @@ public class ProductsTest {
         Products products = new Products();
         products.add(product, 10);
 
-        Order order = new Order("콜라", 10);
-        products.buy(order, null);
+        String orderName = "콜라";
+        int quantity = 10;
+        products.buy(orderName,quantity, null);
 
         assertThat(products.getQuantity(product)).isEqualTo(0);
     }

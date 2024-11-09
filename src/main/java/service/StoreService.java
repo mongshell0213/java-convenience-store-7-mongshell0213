@@ -42,15 +42,17 @@ public class StoreService {
         //프로모션 여부에 따라 null or 프로모션 이름
         String promotionName = products.getPromotionName(order);
         boolean buyPromotion = promotions.isPromotion(LocalDate.now(),promotionName);
-        //process(products,order,buyPromotion);
+        process(products,order,buyPromotion);
     }
 
-    /*
+
     private Products process(Products products,Order order,boolean buyPromotion){
         if(!buyPromotion){
-            products.buy(order,null);
+            String orderName = order.getName();
+            int buyQuantity = order.getQuantity();
+            products.buy(orderName,buyQuantity,null);
         }
+        return products;
     }
 
-     */
 }
