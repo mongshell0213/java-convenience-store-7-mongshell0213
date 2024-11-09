@@ -7,4 +7,7 @@ public class Order {
         this.name = name;
         this.quantity = quantity;
     }
+    public String getName(){
+        return this.name;
+    }
 }

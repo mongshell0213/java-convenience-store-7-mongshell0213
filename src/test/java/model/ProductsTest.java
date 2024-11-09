@@ -15,6 +15,17 @@ public class ProductsTest {
 
         assertThat(products.size()).isEqualTo(1);
     }
+
+    @Test
+    void 상품_존재_테스트(){
+        Product product = new Product("콜라", 1000,"MD추천상품");
+        Products products = new Products();
+        products.add(product,10);
+
+        Order order = new Order("콜라",5);
+
+        assertThat(products.isExist(order)).isTrue();
+    }
 /*
     @Test
     void 상품_과잉구매_테스트(){
@@ -27,16 +38,7 @@ public class ProductsTest {
         assertThatThrownBy(()-> products.buy(buyProduct,15)).isInstanceOf(IllegalArgumentException.class);
     }
 
-    @Test
-    void 상품_미존재_테스트(){
-        Product product = new Product("콜라", 1000,"MD추천상품");
-        Products products = new Products();
-        products.add(product,10);
 
-        Product buyProduct = new Product("사이다", 1000,"MD추천상품");
-
-        assertThatThrownBy(()-> products.buy(buyProduct,10)).isInstanceOf(IllegalArgumentException.class);
-    }
     @Test
     void 상품_구매_테스트(){
         Product product = new Product("콜라", 1000,"MD추천상품");

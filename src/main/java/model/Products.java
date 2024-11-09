@@ -48,9 +48,14 @@ public class Products {
         return new ArrayList<>(productions.keySet());
     }
 
-    private void exist(Product product){
-        if(productions.get(product)==null){
-            throw new IllegalArgumentException(EXIST_ERROR);
+    public boolean isExist(Order order){
+        String orderName = order.getName();
+        List<Product> products = getProductions();
+        for(Product product : products){
+            if(product.isSameName(orderName)) {
+                return true;
+            }
         }
+        return false;
     }
 }
