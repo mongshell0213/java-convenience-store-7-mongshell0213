@@ -23,6 +23,9 @@ public class StoreController {
             storeService.buyProducts();
             storeService.membershipSale();
             storeService.printReceipt();
+            if(!storeService.isBuyMoreProducts()) {
+                break;
+            }
         }
     }
 }

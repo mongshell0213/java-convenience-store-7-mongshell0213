@@ -1,11 +1,11 @@
 package service;
 
+import camp.nextstep.edu.missionutils.DateTimes;
 import constants.Constants;
 import factory.OrderFactory;
 import factory.ProductFactory;
 import factory.PromotionFactory;
 import factory.SalePriceFactory;
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -17,9 +17,6 @@ import model.Product;
 import model.Products;
 import model.Promotion;
 import model.Promotions;
-import policy.Sale8000Policy;
-import policy.SalePercentPolicy;
-import policy.SalePolicy;
 import validation.Validation;
 import view.InputView;
 import view.OutputView;
@@ -64,7 +61,7 @@ public class StoreService {
         for (Order order : orders.getOrders()) {
             products.isExist(order);
             String promotionName = products.getPromotionName(order);
-            Optional<Promotion> buyPromotion = promotions.isPromotion(LocalDate.now(), promotionName);
+            Optional<Promotion> buyPromotion = promotions.isPromotion(DateTimes.now().toLocalDate(), promotionName);
             totalPrice += getTotalPrice(order, buyPromotion);
         }
         return totalPrice;
@@ -86,7 +83,14 @@ public class StoreService {
         outputView.printReceipt(orders, products, gifts, salePrice);
     }
 
-
+    public boolean isBuyMoreProducts(){
+        InputView inputView = new InputView();
+        String answer = inputView.buyMoreProducts();
+        validate(answer);
+        if(answer.equals(Constants.YES_ANSWER))
+            return true;
+        return false;
+    }
     private int getTotalPrice(Order order, Optional<Promotion> buyPromotion) {
         //10줄 이하 리팩토링
         String orderName = order.getName();

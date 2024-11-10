@@ -69,6 +69,8 @@ public class Promotion {
     }
 
     public int getMax(int leftQuantity){
+        if(leftQuantity < (buy+get))
+            return leftQuantity;
         int quotient = leftQuantity / (buy+get);
         return quotient * (buy+get);
     }
