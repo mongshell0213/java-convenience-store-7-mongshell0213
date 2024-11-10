@@ -81,4 +81,11 @@ public class Products {
         }
         return promotionName;
     }
+
+    public int getMaxPossiblePromotion(Product product,Promotion promotion){
+        int leftQuantity = productions.get(product);
+        int quotient = promotion.getMax(leftQuantity);
+        return quotient;
+    }
+
 }

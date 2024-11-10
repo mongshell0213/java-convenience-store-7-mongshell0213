@@ -68,7 +68,10 @@ public class Promotion {
         return quantity - getBuyCount(quantity);
     }
 
-
+    public int getMax(int leftQuantity){
+        int quotient = leftQuantity / (buy+get);
+        return quotient * (buy+get);
+    }
     @Override
     public int hashCode() {
         return Objects.hash(name, buy, get, start_date, end_date);
