@@ -7,7 +7,12 @@ import constants.Constants;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import model.Product;
+import model.Products;
 import model.Promotion;
+import policy.Sale8000Policy;
+import policy.SalePercentPolicy;
+import policy.SalePolicy;
 
 public class Validation {
 
@@ -53,5 +58,12 @@ public class Validation {
         if(!answer.equals(YES_ANSWER) && !answer.equals(NO_ANSWER)){
             throw new IllegalArgumentException(INPUT_ERROR);
         }
+    }
+
+    public static boolean isMaxSale(int payPrice){
+        SalePolicy sale8000Policy = new Sale8000Policy();
+        SalePolicy salePercentPolicy = new SalePercentPolicy();
+
+        return sale8000Policy.salePrice(payPrice) <= salePercentPolicy.salePrice(payPrice);
     }
 }

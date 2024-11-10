@@ -77,6 +77,19 @@ public class ValidationTest extends NsTest {
             .isInstanceOf(IllegalArgumentException.class);
     }
 
+    @Test
+    void 할인_금액_테스트(){
+        int payPrice = 10000;
+
+        assertThat(Validation.isMaxSale(payPrice)).isFalse();
+    }
+
+    @Test
+    void 할인_금액_테스트2(){
+        int payPrice = 80000;
+
+        assertThat(Validation.isMaxSale(payPrice)).isTrue();
+    }
     @Override
     protected void runMain() {
 

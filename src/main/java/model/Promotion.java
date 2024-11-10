@@ -55,7 +55,7 @@ public class Promotion {
             && this.end_date.equals(other.end_date);
     }
 
-    public boolean getMoreFree(int quantity) {
+    public boolean possibleMoreFree(int quantity) {
         return buy - (quantity % (buy + get)) == 0;
     }
 

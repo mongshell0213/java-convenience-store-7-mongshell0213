@@ -6,7 +6,6 @@ import model.Order;
 
 public class Orders {
     private List<Order> inputOrders;
-
     public Orders(){
         inputOrders = new ArrayList<>();
     }
@@ -21,5 +20,11 @@ public class Orders {
 
     public List<Order> getOrders(){
         return inputOrders;
+    }
+
+    public void update(Order order,int newQuantity){
+        int position = inputOrders.indexOf(order);
+        Order newOrder = new Order(order.getName(),newQuantity);
+        inputOrders.set(position,newOrder);
     }
 }

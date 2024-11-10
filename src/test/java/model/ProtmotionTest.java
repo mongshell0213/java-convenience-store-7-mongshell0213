@@ -29,9 +29,9 @@ public class ProtmotionTest {
 
     @Test
     void 추가구매_테스트() {
-        boolean getFree = promotion.getMoreFree(5);
+        boolean possibleFree = promotion.possibleMoreFree(5);
 
-        assertThat(getFree).isTrue();
+        assertThat(possibleFree).isTrue();
     }
 
     @Test

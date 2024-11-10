@@ -14,4 +14,15 @@ public class OrdersTest {
 
         assertThat(orders.getSize()).isEqualTo(1);
     }
+
+    @Test
+    void 주문_수정_테스트(){
+        Order order = new Order("콜라",10);
+        Orders orders = new Orders();
+        orders.add(order);
+
+        orders.update(order,11);
+
+        assertThat(orders.getOrders().equals(new Order("콜라",11)));
+    }
 }

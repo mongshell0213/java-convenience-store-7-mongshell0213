@@ -1,5 +1,6 @@
 package controller;
 
+import model.Gifts;
 import model.Order;
 import model.Orders;
 import model.Products;
@@ -19,8 +20,10 @@ public class StoreController {
         Orders orders = new Orders();
         storeService.readOrders(orders);
         Promotions promotions = storeService.createPromotions();
-        for(Order order: orders.getOrders()) {
-            storeService.buyProducts(products, order, promotions);
-        }
+        Gifts gifts = new Gifts();
+        int totalPrice=0;
+        totalPrice += storeService.buyProducts(products, orders, promotions,gifts);
+
+        System.out.println(totalPrice);
     }
 }

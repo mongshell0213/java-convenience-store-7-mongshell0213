@@ -39,16 +39,15 @@ public class Products {
     }
 
     private void reduce(Product product, int reduceQuantity) {
-        overBuy(product, reduceQuantity);
+        if(isOverBuy(product, reduceQuantity))
+            throw new IllegalArgumentException(OVER_BUY_ERROR);
         int productionAmount = productions.get(product);
         productions.put(product, productionAmount - reduceQuantity);
     }
 
-    private void overBuy(Product buyProduct, int buyAmount) {
+    public boolean isOverBuy(Product buyProduct, int buyAmount) {
         int productionAmount = productions.get(buyProduct);
-        if (productionAmount < buyAmount) {
-            throw new IllegalArgumentException(OVER_BUY_ERROR);
-        }
+        return productionAmount < buyAmount;
     }
 
 
