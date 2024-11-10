@@ -82,12 +82,6 @@ public class Products {
         return promotionName;
     }
 
-    public int getMaxPossiblePromotion(Product product,Promotion promotion){
-        int leftQuantity = productions.get(product);
-        int quotient = promotion.getMax(leftQuantity);
-        return quotient;
-    }
-
     public int getProductPrice(String productName){
         List<Product> products = getProductions();
         for (Product product : products) {
@@ -113,12 +107,19 @@ public class Products {
         List<Product> products = getProductions();
         int leftQuantity=0;
         for(Product product : products){
-            if(product.isSameName(order.getName()) && Objects.equals(product.getPromotion(),promotion)){
+            if(product.isSameName(order.getName()) && promotion.isSame(product.getPromotion())){
                 leftQuantity = productions.get(product);
+                break;
             }
         }
         return leftQuantity > order.getQuantity() && promotion.possibleMoreFree(order.getQuantity());
     }
 
+    public boolean isEnoughPromotion(Product promotionProduct,Promotion promotion,Order order){
+        int orderQuantity = order.getQuantity();
+        int leftQuantity = productions.get(promotionProduct);
+        int remainingQuantity = promotion.calcRemainingQuantity(orderQuantity);
+        return promotion.isSameBuy(remainingQuantity) && orderQuantity+1<=leftQuantity;
+    }
 
 }

@@ -54,4 +54,25 @@ public class ProtmotionTest {
 
         assertThat(buyCount).isEqualTo(2);
     }
+
+    @Test
+    void 프로모션_미적용_테스트(){
+        int quantity = 5;
+
+        assertThat(promotion.notApplyPromotionCount(quantity)).isEqualTo(2);
+    }
+
+    @Test
+    void 프로모션_미적용_테스트2(){
+        int quantity = 2;
+
+        assertThat(promotion.notApplyPromotionCount(quantity)).isEqualTo(2);
+    }
+
+    @Test
+    void 프로모션_미적용_테스트3(){
+        int quantity = 1;
+
+        assertThat(promotion.notApplyPromotionCount(quantity)).isEqualTo(1);
+    }
 }

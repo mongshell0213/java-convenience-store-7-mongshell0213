@@ -22,9 +22,10 @@ public class Orders {
         return inputOrders;
     }
 
-    public void update(Order order,int newQuantity){
+    public Order update(Order order,int newQuantity){
         int position = inputOrders.indexOf(order);
         Order newOrder = new Order(order.getName(),newQuantity);
         inputOrders.set(position,newOrder);
+        return newOrder;
     }
 }

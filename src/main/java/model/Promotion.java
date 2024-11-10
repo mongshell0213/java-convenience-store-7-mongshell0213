@@ -35,6 +35,45 @@ public class Promotion {
         return this.name;
     }
 
+
+
+    public boolean possibleMoreFree(int quantity) {
+        return calcRemainingQuantity(quantity) == buy;
+    }
+
+    public int calcRemainingQuantity(int quantity){
+        int quotient = quantity/(buy+get);
+        return quantity - quotient *(buy+get);
+    }
+
+    public int getBuyCount(int quantity) {
+        int quotient = quantity / (buy + get);
+        return quotient * buy + (quantity - quotient * (buy + get));
+    }
+
+    public int getFreeCount(int quantity) {
+        return quantity - getBuyCount(quantity);
+    }
+
+    public boolean isSameBuy(int buy){
+        return this.buy == buy;
+    }
+
+    public int getMax(int quantity){
+        int quotient = quantity/(buy+get);
+        return quotient * buy;
+    }
+
+    public boolean isNotApplyPromotion(int quantity){
+        return quantity<get+buy;
+    }
+
+    public int notApplyPromotionCount(int quantity){
+        if(isNotApplyPromotion(quantity))
+            return quantity;
+        int quotient = quantity / (buy+get);
+        return quantity - quotient * (buy+get);
+    }
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {
@@ -53,35 +92,6 @@ public class Promotion {
             && this.get == other.get
             && this.start_date.equals(other.start_date)
             && this.end_date.equals(other.end_date);
-    }
-
-    public boolean possibleMoreFree(int quantity) {
-        int quotient = quantity/(buy+get);
-        return quantity - quotient *(buy+get) == buy;
-    }
-
-    public int getBuyCount(int quantity) {
-        int quotient = quantity / (buy + get);
-        return quotient * buy + (quantity - quotient * (buy + get));
-    }
-
-    public int getFreeCount(int quantity) {
-        return quantity - getBuyCount(quantity);
-    }
-
-    public int getMax(int leftQuantity){
-        if(leftQuantity < (buy+get))
-            return leftQuantity;
-        int quotient = leftQuantity / (buy+get);
-        return quotient * (buy+get);
-    }
-
-    public int getBuy(){
-        return buy;
-    }
-
-    public int getFree(){
-        return get;
     }
     @Override
     public int hashCode() {

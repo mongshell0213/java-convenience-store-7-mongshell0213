@@ -129,14 +129,14 @@ public class StoreService {
         boolean possibleMoreFree = products.isPossibleMoreFree(order,promotion);
         if (possibleMoreFree) {
             orderQuantity = orderQuantityDecision(order.getName(), orderQuantity);
-            updateOrder(order, orderQuantity);
-            return process(promotion, orderQuantity, order.getName());
+            order = updateOrder(order, orderQuantity);
+            return process(promotion, order);
         }
-        return process(promotion, orderQuantity, order.getName());
+        return process(promotion, order);
     }
 
-    private void updateOrder(Order order, int newQuantity) {
-        orders.update(order, newQuantity);
+    private Order updateOrder(Order order, int newQuantity) {
+        return orders.update(order, newQuantity);
     }
 
     private int orderQuantityDecision(String orderName, int orderQuantity) {
@@ -149,15 +149,16 @@ public class StoreService {
         return orderQuantity;
     }
 
-    private int process(Promotion promotion, int orderQuantity, String orderName) {
-        int buyCount = promotion.getBuyCount(orderQuantity);
-        int freeCount = promotion.getFreeCount(orderQuantity);
+    private int process(Promotion promotion, Order order) {
+        int buyCount = promotion.getBuyCount(order.getQuantity());
+        int freeCount = promotion.getFreeCount(order.getQuantity());
 
-        Product promotionProduct = infoToProduct(orderName, promotion.getName());
-        if (products.isOverBuy(promotionProduct, orderQuantity)) {
-            return notEnoughPromotion(promotionProduct, orderName, promotion, orderQuantity);
+        Product promotionProduct = infoToProduct(order.getName(), promotion.getName());
+        if (products.isEnoughPromotion(promotionProduct,promotion,order)) {
+            return enoughPromotion(promotion, order.getName(), freeCount, buyCount);
         }
-        return enoughPromotion(promotion, orderName, freeCount, buyCount);
+        return 0;
+        //return notEnoughPromotion(promotionProduct, promotion,order);
     }
 
     private int enoughPromotion(Promotion promotion, String orderName,
@@ -167,10 +168,14 @@ public class StoreService {
         return products.buy(orderName, buyCount, promotion.getName());
     }
 
-    private int notEnoughPromotion(Product promotionProduct, String orderName, Promotion promotion, final int orderQuantity) {
+    /*
+    private int notEnoughPromotion(Product promotionProduct,Promotion promotion,Order order) {
         InputView inputView = new InputView();
+        String orderName = order.getName();
+        int orderQuantity = order.getQuantity();
         //최대 가능 갯수
-        int maxPossiblePromotion = products.getMaxPossiblePromotion(promotionProduct, promotion);
+        //int maxPossiblePromotion = products.getMaxPossiblePromotion(promotionProduct, promotion);
+        int notApplyPromotionCount = products.get
         String answer;
         answer = getValidatedInput(()->inputView.purchaseAtPrice(orderName,orderQuantity-maxPossiblePromotion));
 
@@ -192,8 +197,15 @@ public class StoreService {
         //추가구매 하지 않는 경우
         products.buy(orderName,freeCount,promotion.getName());
         gifts.add(new Gift(orderName, freeCount));
+        order = updateOrder(order, maxPossiblePromotion);
         return products.buy(orderName, buyCount, promotion.getName());
     }
+
+
+
+
+     */
+
 
     private String getValidatedInput(Supplier<String>inputMethod){
         String answer;

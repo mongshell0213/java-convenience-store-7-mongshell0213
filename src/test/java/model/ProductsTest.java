@@ -3,6 +3,9 @@ package model;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 
+import constants.Constants;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import org.junit.jupiter.api.Test;
 
 public class ProductsTest {
@@ -89,5 +92,38 @@ public class ProductsTest {
         assertThat(products.getQuantity(product)).isEqualTo(0);
     }
 
+    @Test
+    void 프로모션_충분_테스트(){
+        Product product = new Product("콜라", 1000, "탄산2+1");
+        Products products = new Products();
+        products.add(product, 10);
+
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(Constants.DATE_FORMAT);
+        String startString = "2024-01-01";
+        String endString = "2024-12-31";
+        LocalDate start = LocalDate.parse(startString,dateTimeFormatter);
+        LocalDate end = LocalDate.parse(endString,dateTimeFormatter);
+        Promotion promotion = new Promotion("탄산2+1",2,1,start,end);
+        Order order = new Order("콜라",5);
+
+        assertThat(products.isEnoughPromotion(product,promotion,order)).isTrue();
+    }
+
+    @Test
+    void 프로모션_불충분_테스트(){
+        Product product = new Product("콜라", 1000, "탄산2+1");
+        Products products = new Products();
+        products.add(product, 4);
+
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(Constants.DATE_FORMAT);
+        String startString = "2024-01-01";
+        String endString = "2024-12-31";
+        LocalDate start = LocalDate.parse(startString,dateTimeFormatter);
+        LocalDate end = LocalDate.parse(endString,dateTimeFormatter);
+        Promotion promotion = new Promotion("탄산2+1",2,1,start,end);
+        Order order = new Order("콜라",5);
+
+        assertThat(products.isEnoughPromotion(product,promotion,order)).isFalse();
+    }
 
 }
