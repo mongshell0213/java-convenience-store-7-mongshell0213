@@ -1,5 +1,7 @@
 package service;
 
+import static model.Products.OVER_BUY_ERROR;
+
 import camp.nextstep.edu.missionutils.DateTimes;
 import constants.Constants;
 import factory.OrderFactory;
@@ -9,6 +11,7 @@ import factory.SalePriceFactory;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.function.Supplier;
 import model.Gift;
 import model.Gifts;
 import model.Order;
@@ -42,8 +45,26 @@ public class StoreService {
     }
 
     public void readOrders() {
-        InputView inputView = new InputView();
-        String orderString = inputView.readItem();
+        while(true) {
+            try {
+                inputOrders(new InputView().readItem());
+                validateOrderCount();
+                break;
+            }catch (IllegalArgumentException e){
+                System.out.println(e.getMessage());
+            }
+        }
+    }
+    private void validateOrderCount(){
+        for(Order order:orders.getOrders()){
+            products.isExist(order);
+            if(order.getQuantity() > products.getPromotionNormalQuantity(order.getName())){
+                throw new IllegalArgumentException(OVER_BUY_ERROR);
+            }
+        }
+    }
+
+    private void inputOrders(String orderString) {
         orders = new Orders();
         OrderFactory.add(orders, orderString);
     }
@@ -59,7 +80,6 @@ public class StoreService {
         notApplyTotalPromotionPrice=0;
         gifts = new Gifts();
         for (Order order : orders.getOrders()) {
-            products.isExist(order);
             String promotionName = products.getPromotionName(order);
             Optional<Promotion> buyPromotion = promotions.isPromotion(DateTimes.now().toLocalDate(), promotionName);
             totalPrice += getTotalPrice(order, buyPromotion);
@@ -67,11 +87,12 @@ public class StoreService {
         return totalPrice;
     }
 
+
     public int membershipSale() {
         salePrice = 0;
         InputView inputView = new InputView();
-        String answer = inputView.checkMembership();
-        validate(answer);
+        String answer;
+        answer = getValidatedInput(inputView::checkMembership);
         if (answer.equals(Constants.YES_ANSWER)) {
             salePrice = SalePriceFactory.salePrice(notApplyTotalPromotionPrice);
         }
@@ -85,8 +106,8 @@ public class StoreService {
 
     public boolean isBuyMoreProducts(){
         InputView inputView = new InputView();
-        String answer = inputView.buyMoreProducts();
-        validate(answer);
+        String answer;
+        answer = getValidatedInput(inputView::buyMoreProducts);
         if(answer.equals(Constants.YES_ANSWER))
             return true;
         return false;
@@ -105,7 +126,7 @@ public class StoreService {
     private int promotionPresent(Order order, Optional<Promotion> buyPromotion) {
         Promotion promotion = buyPromotion.get();
         int orderQuantity = order.getQuantity();
-        boolean possibleMoreFree = promotion.possibleMoreFree(orderQuantity);
+        boolean possibleMoreFree = products.isPossibleMoreFree(order,promotion);
         if (possibleMoreFree) {
             orderQuantity = orderQuantityDecision(order.getName(), orderQuantity);
             updateOrder(order, orderQuantity);
@@ -120,8 +141,8 @@ public class StoreService {
 
     private int orderQuantityDecision(String orderName, int orderQuantity) {
         InputView inputView = new InputView();
-        String answer = inputView.moreFreeProduct(orderName);
-        validate(answer);
+        String answer;
+        answer =getValidatedInput(()->inputView.moreFreeProduct(orderName));
         if (answer.equals(Constants.YES_ANSWER)) {
             orderQuantity++;
         }
@@ -146,12 +167,13 @@ public class StoreService {
         return products.buy(orderName, buyCount, promotion.getName());
     }
 
-    private int notEnoughPromotion(Product promotionProduct, String orderName, Promotion promotion, int orderQuantity) {
+    private int notEnoughPromotion(Product promotionProduct, String orderName, Promotion promotion, final int orderQuantity) {
         InputView inputView = new InputView();
         //최대 가능 갯수
         int maxPossiblePromotion = products.getMaxPossiblePromotion(promotionProduct, promotion);
-        String answer = inputView.purchaseAtPrice(orderName, orderQuantity - maxPossiblePromotion);
-        validate(answer);
+        String answer;
+        answer = getValidatedInput(()->inputView.purchaseAtPrice(orderName,orderQuantity-maxPossiblePromotion));
+
         int buyCount = promotion.getBuyCount(maxPossiblePromotion);
         int freeCount = promotion.getFreeCount(maxPossiblePromotion);
         int totalPrice = 0;
@@ -167,8 +189,23 @@ public class StoreService {
             notApplyTotalPromotionPrice += notApplyPromotionPrice;
             return totalPrice;
         }
-        orderQuantity -= orderQuantity - maxPossiblePromotion;
-        return products.buy(orderName, orderQuantity, null);
+        //추가구매 하지 않는 경우
+        products.buy(orderName,freeCount,promotion.getName());
+        gifts.add(new Gift(orderName, freeCount));
+        return products.buy(orderName, buyCount, promotion.getName());
+    }
+
+    private String getValidatedInput(Supplier<String>inputMethod){
+        String answer;
+        while(true){
+            try {
+                answer = inputMethod.get();
+                validate(answer);
+                return answer;
+            }catch (IllegalArgumentException e){
+                System.out.println(e.getMessage());
+            }
+        }
     }
 
     private void validate(String answer) {

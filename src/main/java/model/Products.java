@@ -97,4 +97,28 @@ public class Products {
         }
         return 0;
     }
+
+    public int getPromotionNormalQuantity(String productName){
+        int count=0;
+        List<Product> products = getProductions();
+        for (Product product : products) {
+            if (product.isSameName(productName)) {
+                count+=productions.get(product);
+            }
+        }
+        return count;
+    }
+
+    public boolean isPossibleMoreFree(Order order, Promotion promotion){
+        List<Product> products = getProductions();
+        int leftQuantity=0;
+        for(Product product : products){
+            if(product.isSameName(order.getName()) && Objects.equals(product.getPromotion(),promotion)){
+                leftQuantity = productions.get(product);
+            }
+        }
+        return leftQuantity > order.getQuantity() && promotion.possibleMoreFree(order.getQuantity());
+    }
+
+
 }

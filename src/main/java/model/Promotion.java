@@ -56,7 +56,8 @@ public class Promotion {
     }
 
     public boolean possibleMoreFree(int quantity) {
-        return buy - (quantity % (buy + get)) == 0;
+        int quotient = quantity/(buy+get);
+        return quantity - quotient *(buy+get) == buy;
     }
 
     public int getBuyCount(int quantity) {
@@ -73,6 +74,14 @@ public class Promotion {
             return leftQuantity;
         int quotient = leftQuantity / (buy+get);
         return quotient * (buy+get);
+    }
+
+    public int getBuy(){
+        return buy;
+    }
+
+    public int getFree(){
+        return get;
     }
     @Override
     public int hashCode() {
