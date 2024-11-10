@@ -16,12 +16,13 @@ public class StoreController {
 
     public void run(){
         storeService.createProducts();
-        storeService.printProducts();
-        storeService.readOrders();
-        storeService.createPromotions();
-        int totalPrice=0;
-        totalPrice += storeService.buyProducts();
-        storeService.membershipSale(totalPrice);
-        storeService.printReceipt();
+        while(true) {
+            storeService.printProducts();
+            storeService.readOrders();
+            storeService.createPromotions();
+            storeService.buyProducts();
+            storeService.membershipSale();
+            storeService.printReceipt();
+        }
     }
 }

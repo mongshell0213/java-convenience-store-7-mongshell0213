@@ -31,6 +31,7 @@ public class StoreService {
     private Promotions promotions;
     private Gifts gifts;
     private int salePrice;
+    private int notApplyTotalPromotionPrice;
 
     public Products createProducts() {
         products = new Products();
@@ -58,6 +59,7 @@ public class StoreService {
 
     public int buyProducts() {
         int totalPrice = 0;
+        notApplyTotalPromotionPrice=0;
         gifts = new Gifts();
         for (Order order : orders.getOrders()) {
             products.isExist(order);
@@ -68,13 +70,13 @@ public class StoreService {
         return totalPrice;
     }
 
-    public int membershipSale(int totalPrice) {
+    public int membershipSale() {
         salePrice = 0;
         InputView inputView = new InputView();
         String answer = inputView.checkMembership();
         validate(answer);
         if (answer.equals(Constants.YES_ANSWER)) {
-            salePrice = SalePriceFactory.salePrice(totalPrice);
+            salePrice = SalePriceFactory.salePrice(notApplyTotalPromotionPrice);
         }
         return salePrice;
     }
@@ -90,7 +92,8 @@ public class StoreService {
         String orderName = order.getName();
         int orderQuantity = order.getQuantity();
         if (!buyPromotion.isPresent()) {
-            return products.buy(orderName, orderQuantity, null);
+            notApplyTotalPromotionPrice = products.buy(orderName, orderQuantity, null);
+            return notApplyTotalPromotionPrice;
         }
         return promotionPresent(order, buyPromotion);
     }
@@ -148,13 +151,16 @@ public class StoreService {
         int buyCount = promotion.getBuyCount(maxPossiblePromotion);
         int freeCount = promotion.getFreeCount(maxPossiblePromotion);
         int totalPrice = 0;
+        int notApplyPromotionPrice=0;
         if (answer.equals(Constants.YES_ANSWER)) {
             products.buy(orderName, freeCount, promotion.getName());
             gifts.add(new Gift(orderName, freeCount));
             totalPrice += products.buy(orderName, buyCount, promotion.getName());
-            totalPrice += products.buy(orderName,
+            notApplyPromotionPrice += products.buy(orderName,
                 orderQuantity - maxPossiblePromotion - products.getQuantity(promotionProduct), null);
-            totalPrice += products.buy(orderName, products.getQuantity(promotionProduct), promotion.getName());
+            notApplyPromotionPrice += products.buy(orderName, products.getQuantity(promotionProduct), promotion.getName());
+            totalPrice+=notApplyPromotionPrice;
+            notApplyTotalPromotionPrice += notApplyPromotionPrice;
             return totalPrice;
         }
         orderQuantity -= orderQuantity - maxPossiblePromotion;
