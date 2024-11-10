@@ -14,4 +14,8 @@ public class Gifts {
     public void add(Gift gift) {
         gifts.add(gift);
     }
+
+    public List<Gift> get(){
+        return this.gifts;
+    }
 }

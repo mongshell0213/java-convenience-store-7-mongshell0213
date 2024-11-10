@@ -88,4 +88,13 @@ public class Products {
         return quotient;
     }
 
+    public int getProductPrice(String productName){
+        List<Product> products = getProductions();
+        for (Product product : products) {
+            if (product.isSameName(productName)) {
+                return product.getPrice();
+            }
+        }
+        return 0;
+    }
 }
