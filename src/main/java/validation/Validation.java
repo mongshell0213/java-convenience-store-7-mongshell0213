@@ -28,10 +28,14 @@ public class Validation {
     }
 
     public static void number(String string) {
+        int num;
         try {
-            int num = Integer.parseInt(string);
+            num = Integer.parseInt(string);
         } catch (NumberFormatException e) {
             throw new IllegalArgumentException(NUMBER_FORMAT_ERROR);
+        }
+        if(num<1){
+            throw new IllegalArgumentException(INPUT_ERROR);
         }
     }
 
