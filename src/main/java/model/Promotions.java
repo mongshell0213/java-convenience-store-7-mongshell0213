@@ -11,14 +11,15 @@ public class Promotions {
     public Promotions(){
         inputPromotions = new ArrayList<>();
     }
-    public void add(Promotion promotion){
+    public void add(final Promotion promotion){
         inputPromotions.add(promotion);
     }
-    public boolean isContain(Promotion promotion){
+    public boolean isContain(final Promotion promotion){
         return inputPromotions.stream().filter(p->p.equals(promotion)).findAny().isPresent();
     }
 
-    public Optional<Promotion> isPromotion(LocalDate date,String orderPromotionName){
+    public Optional<Promotion> isPromotion(final LocalDate date
+        ,final String orderPromotionName){
         for(Promotion promotion : inputPromotions){
             if(promotion.isStartEqualOrAfter(date)
                 && promotion.isEndBeforeOrEqual(date)

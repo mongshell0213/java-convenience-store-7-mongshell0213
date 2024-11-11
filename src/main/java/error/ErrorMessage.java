@@ -12,11 +12,11 @@ public enum ErrorMessage {
     DATE_FORMAT_ERROR("[ERROR] 잘못된 날짜 형식입니다.");
     private final String message;
 
-    ErrorMessage(String message){
+    ErrorMessage(final String message) {
         this.message = message;
     }
 
-    public String getMessage(){
+    public String getMessage() {
         return message;
     }
 }

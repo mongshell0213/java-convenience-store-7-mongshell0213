@@ -1,5 +1,7 @@
 package service;
 
+import static constants.Constants.NOT_EXIST_VALUE;
+import static constants.Constants.YES_ANSWER;
 import static error.ErrorMessage.OVER_BUY_ERROR;
 
 import camp.nextstep.edu.missionutils.DateTimes;
@@ -45,26 +47,27 @@ public class StoreService {
     }
 
     public void readOrders() {
-        while(true) {
+        while (true) {
             try {
                 inputOrders(new InputView().readItem());
                 validateOrderCount();
                 break;
-            }catch (IllegalArgumentException e){
+            } catch (IllegalArgumentException e) {
                 System.out.println(e.getMessage());
             }
         }
     }
-    private void validateOrderCount(){
-        for(Order order:orders.getOrders()){
+
+    private void validateOrderCount() {
+        for (Order order : orders.getOrders()) {
             products.isExist(order);
-            if(order.getQuantity() > products.getPromotionNormalQuantity(order.getName())){
+            if (order.getQuantity() > products.getPromotionNormalQuantity(order.getName())) {
                 throw new IllegalArgumentException(OVER_BUY_ERROR.getMessage());
             }
         }
     }
 
-    private void inputOrders(String orderString) {
+    private void inputOrders(final String orderString) {
         orders = new Orders();
         OrderFactory.add(orders, orderString);
     }
@@ -76,8 +79,8 @@ public class StoreService {
     }
 
     public int buyProducts() {
-        int totalPrice = 0;
-        notApplyTotalPromotionPrice=0;
+        int totalPrice = NOT_EXIST_VALUE;
+        notApplyTotalPromotionPrice = NOT_EXIST_VALUE;
         gifts = new Gifts();
         for (Order order : orders.getOrders()) {
             String promotionName = products.getPromotionName(order);
@@ -89,11 +92,11 @@ public class StoreService {
 
 
     public int membershipSale() {
-        salePrice = 0;
+        salePrice = NOT_EXIST_VALUE;
         InputView inputView = new InputView();
         String answer;
         answer = getValidatedInput(inputView::checkMembership);
-        if (answer.equals(Constants.YES_ANSWER)) {
+        if (answer.equals(YES_ANSWER)) {
             salePrice = SalePriceFactory.salePrice(notApplyTotalPromotionPrice);
         }
         return salePrice;
@@ -104,16 +107,17 @@ public class StoreService {
         outputView.printReceipt(orders, products, gifts, salePrice);
     }
 
-    public boolean isBuyMoreProducts(){
+    public boolean isBuyMoreProducts() {
         InputView inputView = new InputView();
         String answer;
         answer = getValidatedInput(inputView::buyMoreProducts);
-        if(answer.equals(Constants.YES_ANSWER))
+        if (answer.equals(YES_ANSWER)) {
             return true;
+        }
         return false;
     }
-    private int getTotalPrice(Order order, Optional<Promotion> buyPromotion) {
-        //10줄 이하 리팩토링
+
+    private int getTotalPrice(final Order order, final Optional<Promotion> buyPromotion) {
         String orderName = order.getName();
         int orderQuantity = order.getQuantity();
         if (!buyPromotion.isPresent()) {
@@ -123,108 +127,101 @@ public class StoreService {
         return promotionPresent(order, buyPromotion);
     }
 
-    private int promotionPresent(Order order, Optional<Promotion> buyPromotion) {
+    private int promotionPresent(final Order order, final Optional<Promotion> buyPromotion) {
         Promotion promotion = buyPromotion.get();
         int orderQuantity = order.getQuantity();
-        boolean possibleMoreFree = products.isPossibleMoreFree(order,promotion);
+        boolean possibleMoreFree = products.isPossibleMoreFree(order, promotion);
         if (possibleMoreFree) {
             orderQuantity = orderQuantityDecision(order.getName(), orderQuantity);
-            order = updateOrder(order, orderQuantity);
+            updateOrder(order, orderQuantity);
             return process(promotion, order);
         }
         return process(promotion, order);
     }
 
-    private Order updateOrder(Order order, int newQuantity) {
+    private Order updateOrder(final Order order, final int newQuantity) {
         return orders.update(order, newQuantity);
     }
 
-    private int orderQuantityDecision(String orderName, int orderQuantity) {
+    private int orderQuantityDecision(final String orderName, final int orderQuantity) {
         InputView inputView = new InputView();
         String answer;
-        answer =getValidatedInput(()->inputView.moreFreeProduct(orderName));
-        if (answer.equals(Constants.YES_ANSWER)) {
-            orderQuantity++;
+        answer = getValidatedInput(() -> inputView.moreFreeProduct(orderName));
+        if (answer.equals(YES_ANSWER)) {
+            return orderQuantity + 1;
         }
         return orderQuantity;
     }
 
-    private int process(Promotion promotion, Order order) {
+    private int process(final Promotion promotion, final Order order) {
+        Product promotionProduct = infoToProduct(order.getName(), promotion.getName());
+        if (products.isEnoughPromotion(promotionProduct, promotion, order)) {
+            return enoughPromotion(promotion, order);
+        }
+        return notEnoughPromotion(promotionProduct, promotion, order);
+    }
+
+    private int enoughPromotion(final Promotion promotion, final Order order) {
         int buyCount = promotion.getBuyCount(order.getQuantity());
         int freeCount = promotion.getFreeCount(order.getQuantity());
-
-        Product promotionProduct = infoToProduct(order.getName(), promotion.getName());
-        if (products.isEnoughPromotion(promotionProduct,promotion,order)) {
-            return enoughPromotion(promotion, order.getName(), freeCount, buyCount);
-        }
-        return notEnoughPromotion(promotionProduct, promotion,order);
-    }
-
-    private int enoughPromotion(Promotion promotion, String orderName,
-        int freeCount, int buyCount) {
-        products.buy(orderName, freeCount, promotion.getName());
-        gifts.add(new Gift(orderName, freeCount));
-        return products.buy(orderName, buyCount, promotion.getName());
-    }
-
-
-    private int notEnoughPromotion(Product promotionProduct,Promotion promotion,Order order) {
-        InputView inputView = new InputView();
         String orderName = order.getName();
-        int orderQuantity = order.getQuantity();
-
-        int notApplyPromotionCount = products.getNotApplyPromotionCount(promotionProduct,promotion,orderQuantity);
-
-        String answer;
-        answer = getValidatedInput(() -> inputView.purchaseAtPrice(orderName, notApplyPromotionCount));
-
-        int buyCount = promotion.getBuyCount(orderQuantity-notApplyPromotionCount);
-        int freeCount = promotion.getFreeCount(orderQuantity-notApplyPromotionCount);
-        int totalPrice = 0;
-        int notApplyPromotionPrice = 0;
-        if (answer.equals(Constants.YES_ANSWER)) {
-            //수정 필요
-            products.buy(orderName, freeCount, promotion.getName());
-            gifts.add(new Gift(orderName, freeCount));
-            totalPrice += products.buy(orderName, buyCount, promotion.getName());
-            notApplyPromotionPrice += products.buy(orderName,
-                notApplyPromotionCount - products.getQuantity(promotionProduct), null);
-            notApplyPromotionPrice += products.buy(orderName, products.getQuantity(promotionProduct),
-                promotion.getName());
-            totalPrice += notApplyPromotionPrice;
-            notApplyTotalPromotionPrice += notApplyPromotionPrice;
-            return totalPrice;
-        }
-        //추가구매 하지 않는 경우
-        buyCount = promotion.getBuyCount(orderQuantity-notApplyPromotionCount);
-        freeCount = promotion.getFreeCount(orderQuantity-notApplyPromotionCount);
         products.buy(orderName, freeCount, promotion.getName());
         gifts.add(new Gift(orderName, freeCount));
-        order = updateOrder(order, orderQuantity-notApplyPromotionCount);
         return products.buy(orderName, buyCount, promotion.getName());
-
     }
 
+    private int notEnoughPromotion(final Product promotionProduct, final Promotion promotion, final Order order) {
+        InputView inputView = new InputView();
+        int notApplyPromotionCount = products.getNotApplyPromotionCount(promotionProduct, promotion, order.getQuantity());
+        int buyCount = promotion.getBuyCount(order.getQuantity() - notApplyPromotionCount);
+        int freeCount = promotion.getFreeCount(order.getQuantity() - notApplyPromotionCount);
+        String answer = getValidatedInput(() -> inputView.purchaseAtPrice(order.getName(), notApplyPromotionCount));
+        if (!answer.equals(YES_ANSWER)) {
+            return calcPriceExceptNotApply(promotion, order, freeCount, notApplyPromotionCount, buyCount);
+        }
+        return calcPriceIncludeNotApply(promotionProduct, promotion, order.getName(), freeCount, buyCount, notApplyPromotionCount);
+    }
 
-    private String getValidatedInput(Supplier<String>inputMethod){
+    private int calcPriceIncludeNotApply(final Product promotionProduct, final Promotion promotion, final String orderName, final int freeCount, final int buyCount, final int notApplyPromotionCount) {
+        int totalPrice = NOT_EXIST_VALUE;
+        int notApplyPromotionPrice = NOT_EXIST_VALUE;
+        products.buy(orderName, freeCount, promotion.getName());
+        gifts.add(new Gift(orderName, freeCount));
+        totalPrice += products.buy(orderName, buyCount, promotion.getName());
+        notApplyPromotionPrice += products.buy(orderName, notApplyPromotionCount - products.getQuantity(promotionProduct), null);
+        notApplyPromotionPrice += products.buy(orderName, products.getQuantity(promotionProduct), promotion.getName());
+        notApplyTotalPromotionPrice += notApplyPromotionPrice;
+        return totalPrice + notApplyPromotionPrice;
+    }
+
+    private int calcPriceExceptNotApply(final Promotion promotion, final Order order, int freeCount,
+        final int notApplyPromotionCount, final int buyCount) {
+        String orderName = order.getName();
+        products.buy(orderName, freeCount, promotion.getName());
+        gifts.add(new Gift(orderName, freeCount));
+        updateOrder(order, order.getQuantity() - notApplyPromotionCount);
+        return products.buy(orderName, buyCount, promotion.getName());
+    }
+
+    private String getValidatedInput(final Supplier<String> inputMethod) {
         String answer;
-        while(true){
+        while (true) {
             try {
                 answer = inputMethod.get();
-                validate(answer);
-                return answer;
-            }catch (IllegalArgumentException e){
+                return validate(answer);
+            } catch (IllegalArgumentException e) {
                 System.out.println(e.getMessage());
             }
         }
     }
 
-    private void validate(String answer) {
+    private String validate(final String answer) {
         Validation.blank(answer);
         Validation.answerPattern(answer);
+        return answer;
     }
 
-    private Product infoToProduct(String orderName, String promotionName) {
+    private Product infoToProduct(final String orderName, final String promotionName) {
         List<Product> productList = products.getProductions();
         Product returnProduct = null;
         for (Product product : productList) {

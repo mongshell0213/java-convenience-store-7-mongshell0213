@@ -1,5 +1,6 @@
 package model;
 
+import static constants.Constants.NOT_EXIST_VALUE;
 import static error.ErrorMessage.EXIST_ERROR;
 import static error.ErrorMessage.OVER_BUY_ERROR;
 
@@ -17,7 +18,7 @@ public class Products {
         productions = new LinkedHashMap<>();
     }
 
-    public void add(Product product, int amount) {
+    public void add(final Product product, final int amount) {
         productions.put(product, amount);
     }
 
@@ -26,12 +27,11 @@ public class Products {
     }
 
 
-    public int buy(String orderName, int quantity, String promotionName) {
+    public int buy(final String orderName, final int quantity, final String promotionName) {
         List<Product> products = getProductions();
-        int price=0;
+        int price = 0;
         for (Product product : products) {
-            if (product.isSameName(orderName)
-                && Objects.equals(product.getPromotion(), promotionName)) {
+            if (product.isSameName(orderName) && Objects.equals(product.getPromotion(), promotionName)) {
                 reduce(product, quantity);
                 price = product.getPrice() * quantity;
             }
@@ -39,20 +39,21 @@ public class Products {
         return price;
     }
 
-    private void reduce(Product product, int reduceQuantity) {
-        if(isOverBuy(product, reduceQuantity))
+    private void reduce(final Product product, final int reduceQuantity) {
+        if (isOverBuy(product, reduceQuantity)) {
             throw new IllegalArgumentException(OVER_BUY_ERROR.getMessage());
+        }
         int productionAmount = productions.get(product);
         productions.put(product, productionAmount - reduceQuantity);
     }
 
-    public boolean isOverBuy(Product buyProduct, int buyAmount) {
+    public boolean isOverBuy(final Product buyProduct, final int buyAmount) {
         int productionAmount = productions.get(buyProduct);
         return productionAmount < buyAmount;
     }
 
 
-    public int getQuantity(Product product) {
+    public int getQuantity(final Product product) {
         return productions.get(product);
     }
 
@@ -60,7 +61,7 @@ public class Products {
         return new ArrayList<>(productions.keySet());
     }
 
-    public boolean isExist(Order order) {
+    public boolean isExist(final Order order) {
         String orderName = order.getName();
         List<Product> products = getProductions();
         for (Product product : products) {
@@ -71,7 +72,7 @@ public class Products {
         throw new IllegalArgumentException(EXIST_ERROR.getMessage());
     }
 
-    public String getPromotionName(Order order) {
+    public String getPromotionName(final Order order) {
         String promotionName = null;
         String orderName = order.getName();
         List<Product> products = getProductions();
@@ -83,40 +84,40 @@ public class Products {
         return promotionName;
     }
 
-    public int getNotApplyPromotionCount(Product product,Promotion promotion,int orderQuantity){
+    public int getNotApplyPromotionCount(final Product product, final Promotion promotion, final int orderQuantity) {
         int leftQuantity = productions.get(product);
-        if(leftQuantity > orderQuantity){
+        if (leftQuantity > orderQuantity) {
             return promotion.notApplyPromotionCount(orderQuantity);
         }
-        return orderQuantity - promotion.getMax(leftQuantity);
+        return orderQuantity - promotion.getMaxValidPromotion(leftQuantity);
     }
 
-    public int getProductPrice(String productName){
+    public int getProductPrice(final String productName) {
         List<Product> products = getProductions();
         for (Product product : products) {
             if (product.isSameName(productName)) {
                 return product.getPrice();
             }
         }
-        return 0;
+        return NOT_EXIST_VALUE;
     }
 
-    public int getPromotionNormalQuantity(String productName){
-        int count=0;
+    public int getPromotionNormalQuantity(final String productName) {
+        int count = NOT_EXIST_VALUE;
         List<Product> products = getProductions();
         for (Product product : products) {
             if (product.isSameName(productName)) {
-                count+=productions.get(product);
+                count += productions.get(product);
             }
         }
         return count;
     }
 
-    public boolean isPossibleMoreFree(Order order, Promotion promotion){
+    public boolean isPossibleMoreFree(final Order order, final Promotion promotion) {
         List<Product> products = getProductions();
-        int leftQuantity=0;
-        for(Product product : products){
-            if(product.isSameName(order.getName()) && promotion.isSame(product.getPromotion())){
+        int leftQuantity = NOT_EXIST_VALUE;
+        for (Product product : products) {
+            if (product.isSameName(order.getName()) && promotion.isSame(product.getPromotion())) {
                 leftQuantity = productions.get(product);
                 break;
             }
@@ -124,7 +125,7 @@ public class Products {
         return leftQuantity > order.getQuantity() && promotion.possibleMoreFree(order.getQuantity());
     }
 
-    public boolean isEnoughPromotion(Product promotionProduct,Promotion promotion,Order order){
+    public boolean isEnoughPromotion(final Product promotionProduct, final Promotion promotion, final Order order) {
         int orderQuantity = order.getQuantity();
         int leftQuantity = productions.get(promotionProduct);
         return promotion.getMaxValidPromotion(leftQuantity) >= orderQuantity;

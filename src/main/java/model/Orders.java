@@ -5,27 +5,29 @@ import java.util.List;
 import model.Order;
 
 public class Orders {
+
     private List<Order> inputOrders;
-    public Orders(){
+
+    public Orders() {
         inputOrders = new ArrayList<>();
     }
 
-    public void add(Order order){
+    public void add(final Order order) {
         inputOrders.add(order);
     }
 
-    public int getSize(){
+    public int getSize() {
         return inputOrders.size();
     }
 
-    public List<Order> getOrders(){
+    public List<Order> getOrders() {
         return inputOrders;
     }
 
-    public Order update(Order order,int newQuantity){
+    public Order update(final Order order, final int newQuantity) {
         int position = inputOrders.indexOf(order);
-        Order newOrder = new Order(order.getName(),newQuantity);
-        inputOrders.set(position,newOrder);
+        Order newOrder = new Order(order.getName(), newQuantity);
+        inputOrders.set(position, newOrder);
         return newOrder;
     }
 }

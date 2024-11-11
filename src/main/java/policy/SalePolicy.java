@@ -1,6 +1,6 @@
 package policy;
 
 public interface SalePolicy {
-    public int salePrice(int payPrice);
+    public int salePrice(final int payPrice);
 
 }

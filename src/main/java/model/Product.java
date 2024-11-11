@@ -8,7 +8,7 @@ public class Product {
     private int price;
     private String promotion;
 
-    public Product(String name, int price, String promotion) {
+    public Product(final String name, final int price, final String promotion) {
         this.name = name;
         this.price = price;
         this.promotion = promotion;
@@ -37,7 +37,7 @@ public class Product {
         return this.price;
     }
 
-    public boolean isSameName(String name) {
+    public boolean isSameName(final String name) {
         return this.name.equals(name);
     }
 

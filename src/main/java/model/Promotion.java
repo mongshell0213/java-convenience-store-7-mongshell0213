@@ -11,7 +11,8 @@ public class Promotion {
     private LocalDate start_date;
     private LocalDate end_date;
 
-    public Promotion(String name, int buy, int get, LocalDate start_date, LocalDate end_date) {
+    public Promotion(final String name, final int buy, final int get
+        , final LocalDate start_date, final LocalDate end_date) {
         this.name = name;
         this.buy = buy;
         this.get = get;
@@ -19,15 +20,15 @@ public class Promotion {
         this.end_date = end_date;
     }
 
-    public boolean isStartEqualOrAfter(LocalDate date) {
+    public boolean isStartEqualOrAfter(final LocalDate date) {
         return (date.isEqual(start_date) || date.isAfter(start_date));
     }
 
-    public boolean isEndBeforeOrEqual(LocalDate date) {
+    public boolean isEndBeforeOrEqual(final LocalDate date) {
         return (date.isBefore(end_date) || date.isEqual(end_date));
     }
 
-    public boolean isSame(String promotionName) {
+    public boolean isSame(final String promotionName) {
         return this.name.equals(promotionName);
     }
 
@@ -35,51 +36,37 @@ public class Promotion {
         return this.name;
     }
 
-
-
-    public boolean possibleMoreFree(int quantity) {
+    public boolean possibleMoreFree(final int quantity) {
         return calcRemainingQuantity(quantity) == buy;
     }
 
-    public int calcRemainingQuantity(int quantity){
-        int quotient = quantity/(buy+get);
-        return quantity - quotient *(buy+get);
+    public int calcRemainingQuantity(final int quantity) {
+        int quotient = quantity / (buy + get);
+        return quantity - quotient * (buy + get);
     }
 
 
-    public int getBuyCount(int quantity) {
+    public int getBuyCount(final int quantity) {
         int quotient = quantity / (buy + get);
         return quotient * buy + (quantity - quotient * (buy + get));
     }
 
-    public int getFreeCount(int quantity) {
+    public int getFreeCount(final int quantity) {
         return quantity - getBuyCount(quantity);
     }
 
-    public boolean isSameBuy(int buy){
-        return this.buy == buy;
+    public int getMaxValidPromotion(final int quantity) {
+        int quotient = quantity / (buy + get);
+        return quotient * (buy + get);
     }
 
-    public int getMax(int quantity){
-        int quotient = quantity/(buy+get);
-        return quotient * (buy+get);
+    public int notApplyPromotionCount(final int quantity) {
+        int quotient = quantity / (buy + get);
+        return quantity - quotient * (buy + get);
     }
 
-    public int getMaxValidPromotion(int quantity){
-        int quotient = quantity/(buy+get);
-        return quotient * (buy+get);
-    }
-
-    public boolean isNotApplyPromotion(int quantity){
-        return quantity<get+buy;
-    }
-
-    public int notApplyPromotionCount(int quantity){
-        int quotient = quantity / (buy+get);
-        return quantity - quotient * (buy+get);
-    }
     @Override
-    public boolean equals(Object obj) {
+    public boolean equals(final Object obj) {
         if (this == obj) {
             return true;
         }
@@ -90,13 +77,14 @@ public class Promotion {
         return compare(other);
     }
 
-    private boolean compare(Promotion other) {
+    private boolean compare(final Promotion other) {
         return Objects.equals(this.name, other.name)
             && this.buy == other.buy
             && this.get == other.get
             && this.start_date.equals(other.start_date)
             && this.end_date.equals(other.end_date);
     }
+
     @Override
     public int hashCode() {
         return Objects.hash(name, buy, get, start_date, end_date);

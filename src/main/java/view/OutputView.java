@@ -9,6 +9,8 @@ import model.Orders;
 import model.Product;
 import model.Products;
 
+import static constants.Constants.BLANK;
+import static constants.Constants.NOT_EXIST_VALUE;
 import static java.lang.System.lineSeparator;
 
 public class OutputView {
@@ -27,25 +29,26 @@ public class OutputView {
     private static final String PRINT_GIFT_MESSAGE = "%s\t\t%d";
     private static final String RESULT_MESSAGE = "====================================";
     private static final String TOTAL_PRICE_MESSAGE = "총구매액\t\t%d\t%,d";
-    private static final String GIFT_SALE_MESSAGE="행사할인\t\t\t-%,d";
-    private static final String MEMBERSHIP_SALE_MESSAGE="멤버십할인\t\t\t-%,d";
-    private static final String RESULT_PRICE_MESSAGE ="내실돈\t\t\t%,d";
-    public void printProductions(Products inputProducts) {
+    private static final String GIFT_SALE_MESSAGE = "행사할인\t\t\t-%,d";
+    private static final String MEMBERSHIP_SALE_MESSAGE = "멤버십할인\t\t\t-%,d";
+    private static final String RESULT_PRICE_MESSAGE = "내실돈\t\t\t%,d";
+
+    public void printProductions(final Products inputProducts) {
         List<Product> products = inputProducts.getProductions();
         StringBuilder sb = buildProductionString(inputProducts, products);
         System.out.println(sb);
     }
 
-    private StringBuilder buildProductionString(Products inputProducts, List<Product> products) {
+    private StringBuilder buildProductionString(final Products inputProducts, final List<Product> products) {
         StringBuilder sb = new StringBuilder();
         sb.append(WELCOME_MESSAGE).append(lineSeparator());
         for (Product product : products) {
-            process(inputProducts, product, sb);
+            buildProcess(inputProducts, product, sb);
         }
         return sb;
     }
 
-    private void process(Products inputProducts, Product product, StringBuilder sb) {
+    private void buildProcess(final Products inputProducts, final Product product, final StringBuilder sb) {
         String name = product.getName();
         String promotion = getPromotion(product);
         int price = product.getPrice();
@@ -54,45 +57,57 @@ public class OutputView {
             .append(lineSeparator());
     }
 
-    private static String getPromotion(Product product) {
+    private static String getPromotion(final Product product) {
         String promotion = product.getPromotion();
         if (promotion == null) {
-            promotion = Constants.BLANK;
+            promotion = BLANK;
         }
         return promotion;
     }
 
-    private String getQuantityString(int quantity) {
-        if (quantity == 0) {
+    private String getQuantityString(final int quantity) {
+        if (quantity == NOT_EXIST_VALUE) {
             return NONE_PRODUCTION_MESSAGE;
         }
         return quantity + COUNT_UNIT;
     }
-
-    public void printReceipt(Orders orders,Products products, Gifts gifts,int salePrice){
+    private int totalOrderCount;
+    private int totalOrderPrice;
+    int totalGiftSalePrice;
+    public void printReceipt(final Orders orders, final Products products, final Gifts gifts, final int salePrice) {
         System.out.println(RECEIPT_MESSAGE);
-        System.out.println(ORDER_MESSAGE);
-        int totalOrderCount=0;
-        int totalOrderPrice=0;
-        for(Order order:orders.getOrders()){
-            int orderPrice = order.getQuantity() * products.getProductPrice(order.getName());
-            System.out.println(String.format(PRINT_ORDER_MESSAGE,order.getName(),order.getQuantity(),orderPrice));
-            totalOrderPrice+=orderPrice;
-            totalOrderCount+=order.getQuantity();
-        }
-        System.out.println(GIFT_MESSAGE);
-        int totalGiftSalePrice=0;
-        for(Gift gift : gifts.get()){
-            System.out.println(String.format(PRINT_GIFT_MESSAGE,gift.getName(),gift.getQuantity()));
-            totalGiftSalePrice += gift.getQuantity() * products.getProductPrice(gift.getName());
-        }
-        System.out.println(RESULT_MESSAGE);
-        System.out.println(String.format(TOTAL_PRICE_MESSAGE,totalOrderCount,totalOrderPrice));
-        System.out.println(String.format(GIFT_SALE_MESSAGE,totalGiftSalePrice));
-        System.out.println(String.format(MEMBERSHIP_SALE_MESSAGE,salePrice));
-        System.out.println(String.format(RESULT_PRICE_MESSAGE,totalOrderPrice-totalGiftSalePrice-salePrice));
+        printOrderHistory(orders, products);
+        printGiftHistory(products, gifts);
+        printResult(salePrice);
         System.out.println();
     }
 
+    private void printGiftHistory(final Products products, final Gifts gifts) {
+        System.out.println(GIFT_MESSAGE);
+        totalGiftSalePrice = NOT_EXIST_VALUE;
+        for (Gift gift : gifts.get()) {
+            System.out.println(String.format(PRINT_GIFT_MESSAGE, gift.getName(), gift.getQuantity()));
+            totalGiftSalePrice += gift.getQuantity() * products.getProductPrice(gift.getName());
+        }
+    }
 
+    private void printOrderHistory(final Orders orders, final Products products) {
+        System.out.println(ORDER_MESSAGE);
+        totalOrderCount = NOT_EXIST_VALUE;
+        totalOrderPrice = NOT_EXIST_VALUE;
+        for (Order order : orders.getOrders()) {
+            int orderPrice = order.getQuantity() * products.getProductPrice(order.getName());
+            System.out.println(String.format(PRINT_ORDER_MESSAGE, order.getName(), order.getQuantity(), orderPrice));
+            totalOrderPrice += orderPrice;
+            totalOrderCount += order.getQuantity();
+        }
+    }
+
+    private void printResult(final int salePrice) {
+        System.out.println(RESULT_MESSAGE);
+        System.out.println(String.format(TOTAL_PRICE_MESSAGE, totalOrderCount, totalOrderPrice));
+        System.out.println(String.format(GIFT_SALE_MESSAGE, totalGiftSalePrice));
+        System.out.println(String.format(MEMBERSHIP_SALE_MESSAGE, salePrice));
+        System.out.println(String.format(RESULT_PRICE_MESSAGE, totalOrderPrice - totalGiftSalePrice - salePrice));
+    }
 }

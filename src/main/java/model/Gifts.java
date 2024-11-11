@@ -11,12 +11,13 @@ public class Gifts {
         gifts = new ArrayList<>();
     }
 
-    public void add(Gift gift) {
-        if(gift.getQuantity()!=0)
+    public void add(final Gift gift) {
+        if (gift.getQuantity() != 0) {
             gifts.add(gift);
+        }
     }
 
-    public List<Gift> get(){
-        return this.gifts;
+    public List<Gift> get() {
+        return gifts;
     }
 }

@@ -13,12 +13,12 @@ public class InputView {
         return Console.readLine();
     }
 
-    public String moreFreeProduct(String orderName){
+    public String moreFreeProduct(final String orderName){
         System.out.println(String.format(MORE_FREE_PRODUCT_MESSAGE,orderName));
         return Console.readLine();
     }
 
-    public String purchaseAtPrice(String orderName, int quantity){
+    public String purchaseAtPrice(final String orderName, int quantity){
         System.out.println(String.format(PURCHASE_PRICE_MESSAGE,orderName,quantity));
         return Console.readLine();
     }
