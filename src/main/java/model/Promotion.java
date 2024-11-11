@@ -46,6 +46,7 @@ public class Promotion {
         return quantity - quotient *(buy+get);
     }
 
+
     public int getBuyCount(int quantity) {
         int quotient = quantity / (buy + get);
         return quotient * buy + (quantity - quotient * (buy + get));
@@ -61,7 +62,12 @@ public class Promotion {
 
     public int getMax(int quantity){
         int quotient = quantity/(buy+get);
-        return quotient * buy;
+        return quotient * (buy+get);
+    }
+
+    public int getMaxValidPromotion(int quantity){
+        int quotient = quantity/(buy+get);
+        return quotient * (buy+get);
     }
 
     public boolean isNotApplyPromotion(int quantity){
@@ -69,8 +75,6 @@ public class Promotion {
     }
 
     public int notApplyPromotionCount(int quantity){
-        if(isNotApplyPromotion(quantity))
-            return quantity;
         int quotient = quantity / (buy+get);
         return quantity - quotient * (buy+get);
     }

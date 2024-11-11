@@ -125,5 +125,106 @@ public class ProductsTest {
 
         assertThat(products.isEnoughPromotion(product,promotion,order)).isFalse();
     }
+    @Test
+    void 프로모션_불충분_테스트2(){
+        Product product = new Product("콜라", 1000, "탄산2+1");
+        Products products = new Products();
+        products.add(product, 7);
 
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(Constants.DATE_FORMAT);
+        String startString = "2024-01-01";
+        String endString = "2024-12-31";
+        LocalDate start = LocalDate.parse(startString,dateTimeFormatter);
+        LocalDate end = LocalDate.parse(endString,dateTimeFormatter);
+        Promotion promotion = new Promotion("탄산2+1",2,1,start,end);
+        Order order = new Order("콜라",7);
+
+        assertThat(products.isEnoughPromotion(product,promotion,order)).isFalse();
+    }
+
+    @Test
+    void 프로모션_미적용_갯수_테스트1(){
+        Product product = new Product("콜라", 1000, "탄산2+1");
+        Products products = new Products();
+        products.add(product, 10);
+
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(Constants.DATE_FORMAT);
+        String startString = "2024-01-01";
+        String endString = "2024-12-31";
+        LocalDate start = LocalDate.parse(startString,dateTimeFormatter);
+        LocalDate end = LocalDate.parse(endString,dateTimeFormatter);
+        Promotion promotion = new Promotion("탄산2+1",2,1,start,end);
+        Order order = new Order("콜라",5);
+
+        assertThat(products.getNotApplyPromotionCount(product,promotion,order.getQuantity())).isEqualTo(2);
+    }
+
+    @Test
+    void 프로모션_미적용_갯수_테스트2(){
+        Product product = new Product("콜라", 1000, "탄산2+1");
+        Products products = new Products();
+        products.add(product, 6);
+
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(Constants.DATE_FORMAT);
+        String startString = "2024-01-01";
+        String endString = "2024-12-31";
+        LocalDate start = LocalDate.parse(startString,dateTimeFormatter);
+        LocalDate end = LocalDate.parse(endString,dateTimeFormatter);
+        Promotion promotion = new Promotion("탄산2+1",2,1,start,end);
+        Order order = new Order("콜라",6);
+
+        int count = products.getNotApplyPromotionCount(product,promotion,order.getQuantity());
+        assertThat(count).isEqualTo(0);
+    }
+
+    @Test
+    void 프로모션_미적용_갯수_테스트3(){
+        Product product = new Product("콜라", 1000, "탄산2+1");
+        Products products = new Products();
+        products.add(product, 7);
+
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(Constants.DATE_FORMAT);
+        String startString = "2024-01-01";
+        String endString = "2024-12-31";
+        LocalDate start = LocalDate.parse(startString,dateTimeFormatter);
+        LocalDate end = LocalDate.parse(endString,dateTimeFormatter);
+        Promotion promotion = new Promotion("탄산2+1",2,1,start,end);
+        Order order = new Order("콜라",7);
+
+        assertThat(products.getNotApplyPromotionCount(product,promotion,order.getQuantity())).isEqualTo(1);
+    }
+
+    @Test
+    void 프로모션_미적용_갯수_테스트4(){
+        Product product = new Product("콜라", 1000, "탄산2+1");
+        Products products = new Products();
+        products.add(product, 5);
+
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(Constants.DATE_FORMAT);
+        String startString = "2024-01-01";
+        String endString = "2024-12-31";
+        LocalDate start = LocalDate.parse(startString,dateTimeFormatter);
+        LocalDate end = LocalDate.parse(endString,dateTimeFormatter);
+        Promotion promotion = new Promotion("탄산2+1",2,1,start,end);
+        Order order = new Order("콜라",7);
+
+        assertThat(products.getNotApplyPromotionCount(product,promotion,order.getQuantity())).isEqualTo(4);
+    }
+
+    @Test
+    void 프로모션_미적용_갯수_테스트5(){
+        Product product = new Product("콜라", 1000, "탄산2+1");
+        Products products = new Products();
+        products.add(product, 2);
+
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(Constants.DATE_FORMAT);
+        String startString = "2024-01-01";
+        String endString = "2024-12-31";
+        LocalDate start = LocalDate.parse(startString,dateTimeFormatter);
+        LocalDate end = LocalDate.parse(endString,dateTimeFormatter);
+        Promotion promotion = new Promotion("탄산2+1",1,1,start,end);
+        Order order = new Order("콜라",1);
+
+        assertThat(products.getNotApplyPromotionCount(product,promotion,order.getQuantity())).isEqualTo(1);
+    }
 }

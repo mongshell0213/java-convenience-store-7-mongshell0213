@@ -82,6 +82,14 @@ public class Products {
         return promotionName;
     }
 
+    public int getNotApplyPromotionCount(Product product,Promotion promotion,int orderQuantity){
+        int leftQuantity = productions.get(product);
+        if(leftQuantity > orderQuantity){
+            return promotion.notApplyPromotionCount(orderQuantity);
+        }
+        return orderQuantity - promotion.getMax(leftQuantity);
+    }
+
     public int getProductPrice(String productName){
         List<Product> products = getProductions();
         for (Product product : products) {
@@ -118,8 +126,7 @@ public class Products {
     public boolean isEnoughPromotion(Product promotionProduct,Promotion promotion,Order order){
         int orderQuantity = order.getQuantity();
         int leftQuantity = productions.get(promotionProduct);
-        int remainingQuantity = promotion.calcRemainingQuantity(orderQuantity);
-        return promotion.isSameBuy(remainingQuantity) && orderQuantity+1<=leftQuantity;
+        return promotion.getMaxValidPromotion(leftQuantity) >= orderQuantity;
     }
 
 }
