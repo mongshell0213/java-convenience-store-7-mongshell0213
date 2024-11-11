@@ -1,5 +1,8 @@
 package factory;
 
+import static error.ErrorMessage.FILE_NOT_FOUND_ERROR;
+import static error.ErrorMessage.IO_EXCEPTION_ERROR;
+
 import constants.Constants;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -11,20 +14,17 @@ import validation.Validation;
 
 public class ProductFactory {
 
-    private static final String IO_EXCEPTION_ERROR = "[ERROR] 입출력 작업 예외입니다.";
-    private static final String FILE_NOT_FOUND_ERROR = "[ERROR] 파일이 존재 하지 않습니다.";
 
     public static void input(Products products) {
         try {
             BufferedReader br = new BufferedReader(new FileReader(Constants.PRODUCTS_FILE_PATH));
             process(products, br);
         } catch (FileNotFoundException e) {
-            throw new IllegalArgumentException(FILE_NOT_FOUND_ERROR);
+            throw new IllegalArgumentException(FILE_NOT_FOUND_ERROR.getMessage());
         } catch (IOException e) {
-            throw new IllegalArgumentException(IO_EXCEPTION_ERROR);
+            throw new IllegalArgumentException(IO_EXCEPTION_ERROR.getMessage());
         }
     }
-
 
     private static void process(Products products, BufferedReader br) throws IOException {
         String inputLine;

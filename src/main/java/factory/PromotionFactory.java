@@ -1,5 +1,9 @@
 package factory;
 
+import static error.ErrorMessage.FILE_INPUT_FORMAT_ERROR;
+import static error.ErrorMessage.FILE_NOT_FOUND_ERROR;
+import static error.ErrorMessage.IO_EXCEPTION_ERROR;
+
 import constants.Constants;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -13,9 +17,6 @@ import validation.Validation;
 
 public class PromotionFactory {
 
-    private static final String IO_EXCEPTION_ERROR = "[ERROR] 입출력 작업 예외입니다.";
-    private static final String FILE_NOT_FOUND_ERROR = "[ERROR] 파일이 존재 하지 않습니다.";
-    private static final String FILE_INPUT_FORMAT_ERROR = "[ERROR] 파일 입력 형식 오류입니다.";
     private static final int PromotionAttributeCount = 5;
 
     public static void input(Promotions promotions) {
@@ -23,9 +24,9 @@ public class PromotionFactory {
             BufferedReader br = new BufferedReader(new FileReader(Constants.PROMOTIONS_FILE_PATH));
             process(promotions, br);
         } catch (FileNotFoundException e) {
-            throw new IllegalArgumentException(FILE_NOT_FOUND_ERROR);
+            throw new IllegalArgumentException(FILE_NOT_FOUND_ERROR.getMessage());
         } catch (IOException e) {
-            throw new IllegalArgumentException(IO_EXCEPTION_ERROR);
+            throw new IllegalArgumentException(IO_EXCEPTION_ERROR.getMessage());
         }
     }
 
@@ -64,7 +65,7 @@ public class PromotionFactory {
 
     private static void validateAttributeCount(String[] strings) {
         if (strings.length != PromotionAttributeCount) {
-            throw new IllegalArgumentException(FILE_INPUT_FORMAT_ERROR);
+            throw new IllegalArgumentException(FILE_INPUT_FORMAT_ERROR.getMessage());
         }
     }
 

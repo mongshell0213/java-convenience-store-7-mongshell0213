@@ -1,5 +1,8 @@
 package model;
 
+import static error.ErrorMessage.EXIST_ERROR;
+import static error.ErrorMessage.OVER_BUY_ERROR;
+
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -9,8 +12,6 @@ import java.util.Objects;
 public class Products {
 
     Map<Product, Integer> productions;
-    public static final String OVER_BUY_ERROR = "[ERROR] 재고 수량을 초과하여 구매할 수 없습니다. 다시 입력해 주세요.";
-    public static final String EXIST_ERROR = "[ERROR] 존재하지 않는 상품입니다. 다시 입력해 주세요.";
 
     public Products() {
         productions = new LinkedHashMap<>();
@@ -40,7 +41,7 @@ public class Products {
 
     private void reduce(Product product, int reduceQuantity) {
         if(isOverBuy(product, reduceQuantity))
-            throw new IllegalArgumentException(OVER_BUY_ERROR);
+            throw new IllegalArgumentException(OVER_BUY_ERROR.getMessage());
         int productionAmount = productions.get(product);
         productions.put(product, productionAmount - reduceQuantity);
     }
@@ -67,7 +68,7 @@ public class Products {
                 return true;
             }
         }
-        throw new IllegalArgumentException(EXIST_ERROR);
+        throw new IllegalArgumentException(EXIST_ERROR.getMessage());
     }
 
     public String getPromotionName(Order order) {

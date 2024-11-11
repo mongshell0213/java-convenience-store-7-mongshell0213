@@ -2,6 +2,10 @@ package validation;
 
 import static constants.Constants.NO_ANSWER;
 import static constants.Constants.YES_ANSWER;
+import static error.ErrorMessage.DATE_FORMAT_ERROR;
+import static error.ErrorMessage.INPUT_BLANK_ERROR;
+import static error.ErrorMessage.INPUT_ERROR;
+import static error.ErrorMessage.NUMBER_FORMAT_ERROR;
 
 import constants.Constants;
 import java.time.LocalDate;
@@ -16,14 +20,10 @@ import policy.SalePolicy;
 
 public class Validation {
 
-    private static final String INPUT_BLANK_ERROR = "[ERROR] 비어있는 문자열입니다.";
-    private static final String NUMBER_FORMAT_ERROR = "[ERROR] 숫자형식이 아닙니다.";
-    private static final String INPUT_ERROR = "[ERROR] 잘못된 입력입니다. 다시 입력해 주세요.";
-    private static final String DATE_FORMAT_ERROR = "[ERROR] 잘못된 날짜 형식입니다.";
 
     public static void blank(String string) {
         if (string == null || string.isBlank()) {
-            throw new IllegalArgumentException(INPUT_BLANK_ERROR);
+            throw new IllegalArgumentException(INPUT_BLANK_ERROR.getMessage());
         }
     }
 
@@ -32,19 +32,19 @@ public class Validation {
         try {
             num = Integer.parseInt(string);
         } catch (NumberFormatException e) {
-            throw new IllegalArgumentException(NUMBER_FORMAT_ERROR);
+            throw new IllegalArgumentException(NUMBER_FORMAT_ERROR.getMessage());
         }
         if(num<1){
-            throw new IllegalArgumentException(INPUT_ERROR);
+            throw new IllegalArgumentException(INPUT_ERROR.getMessage());
         }
     }
 
     public static void orderPattern(String string) {
         if (!string.startsWith(Constants.ORDER_STARTER) || !string.endsWith(Constants.ORDER_ENDER)) {
-            throw new IllegalArgumentException(INPUT_ERROR);
+            throw new IllegalArgumentException(INPUT_ERROR.getMessage());
         }
         if (string.split(Constants.ORDER_DELIMITER).length != Constants.ORDER_ATTRIBUTE_LEN) {
-            throw new IllegalArgumentException(INPUT_ERROR);
+            throw new IllegalArgumentException(INPUT_ERROR.getMessage());
         }
         number(string.split(Constants.ORDER_DELIMITER)[1].replace(Constants.ORDER_ENDER, Constants.BLANK));
     }
@@ -54,13 +54,13 @@ public class Validation {
         try {
             LocalDate date = LocalDate.parse(string, dateTimeFormatter);
         } catch (DateTimeParseException e) {
-            throw new IllegalArgumentException(DATE_FORMAT_ERROR);
+            throw new IllegalArgumentException(DATE_FORMAT_ERROR.getMessage());
         }
     }
 
     public static void answerPattern(String answer){
         if(!answer.equals(YES_ANSWER) && !answer.equals(NO_ANSWER)){
-            throw new IllegalArgumentException(INPUT_ERROR);
+            throw new IllegalArgumentException(INPUT_ERROR.getMessage());
         }
     }
 

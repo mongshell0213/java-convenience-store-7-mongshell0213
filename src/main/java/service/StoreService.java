@@ -1,6 +1,6 @@
 package service;
 
-import static model.Products.OVER_BUY_ERROR;
+import static error.ErrorMessage.OVER_BUY_ERROR;
 
 import camp.nextstep.edu.missionutils.DateTimes;
 import constants.Constants;
@@ -59,7 +59,7 @@ public class StoreService {
         for(Order order:orders.getOrders()){
             products.isExist(order);
             if(order.getQuantity() > products.getPromotionNormalQuantity(order.getName())){
-                throw new IllegalArgumentException(OVER_BUY_ERROR);
+                throw new IllegalArgumentException(OVER_BUY_ERROR.getMessage());
             }
         }
     }
