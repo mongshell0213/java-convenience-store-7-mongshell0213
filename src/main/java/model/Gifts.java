@@ -12,7 +12,8 @@ public class Gifts {
     }
 
     public void add(Gift gift) {
-        gifts.add(gift);
+        if(gift.getQuantity()!=0)
+            gifts.add(gift);
     }
 
     public List<Gift> get(){
